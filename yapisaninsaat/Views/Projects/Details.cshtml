@@ -1,0 +1,42 @@
+@model yapisaninsaat.Models.Project
+@{ ViewData["Title"] = "Proje Detayı"; }
+
+<h2 class="mb-4"><i class="fas fa-eye me-2"></i>@Model.Title</h2>
+<div class="card"><div class="card-body">
+<dl class="row">
+    <dt class="col-sm-3">Başlık</dt><dd class="col-sm-9">@Model.Title</dd>
+    <dt class="col-sm-3">Kategori</dt><dd class="col-sm-9"><span class="badge bg-info">@Model.Category?.Title</span></dd>
+ <dt class="col-sm-3">Slug</dt><dd class="col-sm-9"><code>/@Model.Slug</code></dd>
+    <dt class="col-sm-3">Konum</dt><dd class="col-sm-9">@Model.Location</dd>
+  <dt class="col-sm-3">Kısa Açıklama</dt><dd class="col-sm-9">@Model.ShortDescription</dd>
+    <dt class="col-sm-3">Başlangıç</dt><dd class="col-sm-9">@Model.StartDate?.ToString("dd.MM.yyyy")</dd>
+<dt class="col-sm-3">Bitiş</dt><dd class="col-sm-9">@Model.EndDate?.ToString("dd.MM.yyyy")</dd>
+    <dt class="col-sm-3">Durum</dt><dd class="col-sm-9">@(Model.ProjectStatus == 0 ? "Devam Eden" : "Biten")</dd>
+  <dt class="col-sm-3">Öne Çıkan</dt><dd class="col-sm-9">@(Model.IsFeatured ? "Evet" : "Hayır")</dd>
+    <dt class="col-sm-3">Açıklama</dt><dd class="col-sm-9">@Html.Raw(Model.Description)</dd>
+</dl>
+</div></div>
+
+@if (Model.ProjectImages.Any())
+{
+<h4 class="mt-4 mb-3"><i class="fas fa-images me-2"></i>Proje Görselleri</h4>
+<div class="row">
+@foreach (var img in Model.ProjectImages)
+{
+<div class="col-md-3 mb-3">
+    <div class="card">
+     <img src="@img.ImageUrl" class="card-img-top" style="height:180px;object-fit:cover" />
+        <div class="card-body p-2 text-center">
+          @if (img.IsCover) { <span class="badge bg-primary">Kapak</span> }
+      <small class="text-muted">Sıra: @img.Order</small>
+      </div>
+    </div>
+</div>
+}
+</div>
+}
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="fas fa-edit me-1"></i>Düzenle</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Listeye Dön</a>
+</div>

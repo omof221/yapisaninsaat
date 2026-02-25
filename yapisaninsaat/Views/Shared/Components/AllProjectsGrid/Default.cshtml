@@ -1,0 +1,82 @@
+@model List<yapisaninsaat.Models.Project>
+@using yapisaninsaat.Models
+@{
+    int? durum = ViewBag.Durum;
+int? kategori = ViewBag.Kategori;
+ var categories = ViewBag.Categories as List<ProjectCategory> ?? new List<ProjectCategory>();
+}
+
+<section class="projects-list-section">
+    <div class="container">
+        <!-- FİLTRE TABLARI -->
+     <div class="projects-filter-bar">
+    <div class="projects-filter-tabs">
+  <a href="/projeler" class="projects-filter-tab @(durum == null && kategori == null ? "active" : "")">Tümü</a>
+     <a href="/projeler?durum=0" class="projects-filter-tab @(durum == 0 ? "active" : "")">Devam Eden</a>
+<a href="/projeler?durum=1" class="projects-filter-tab @(durum == 1 ? "active" : "")">Tamamlanan</a>
+            </div>
+   @if (categories.Any())
+          {
+       <div class="projects-filter-categories">
+            @foreach (var cat in categories)
+     {
+      <a href="/projeler?kategori=@cat.Id@(durum.HasValue ? "&durum=" + durum : "")"
+ class="projects-filter-chip @(kategori == cat.Id ? "active" : "")">@cat.Title</a>
+    }
+    @if (kategori.HasValue)
+  {
+  <a href="/projeler@(durum.HasValue ? "?durum=" + durum : "")"
+    class="projects-filter-chip" style="border-style:dashed">Filtreyi Kaldır</a>
+          }
+   </div>
+            }
+        </div>
+
+   <!-- PROJE SAYISI -->
+    <div class="projects-list-count">
+   <span>@Model.Count proje bulundu</span>
+ </div>
+
+     <!-- PROJELER GRID -->
+    @if (Model.Any())
+    {
+            <div class="projects-list-grid">
+            @foreach (var project in Model)
+                {
+           var cover = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? project.ProjectImages?.FirstOrDefault();
+         string statusBadge = project.ProjectStatus == 0 ? "Devam Ediyor" : "Tamamlandı";
+      <a class="project-card" href="/proje/@project.Slug">
+              @if (cover != null && !string.IsNullOrEmpty(cover.ImageUrl))
+            {
+             <img src="@cover.ImageUrl" alt="@project.Title" />
+         }
+ else
+     {
+       <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+    <iconify-icon icon="lucide:building-2" style="font-size:48px;color:rgba(255,255,255,0.15)"></iconify-icon>
+            </div>
+               }
+     <div class="project-list-badge">@statusBadge</div>
+    <div class="project-info">
+  <div>
+                 <div class="project-name">@project.Title</div>
+    <div class="project-meta">@project.Category?.Title • @project.Location</div>
+  </div>
+  <div class="project-arrow">
+     <iconify-icon icon="lucide:arrow-right" style="font-size:20px"></iconify-icon>
+           </div>
+        </div>
+             </a>
+                }
+      </div>
+        }
+        else
+        {
+ <div class="projects-list-empty">
+     <iconify-icon icon="lucide:folder-open" style="font-size:48px;color:var(--muted-foreground);opacity:0.4"></iconify-icon>
+  <p>Bu kriterlere uygun proje bulunamadı.</p>
+       <a href="/projeler" class="btn-secondary">Tüm Projeleri Gör</a>
+     </div>
+        }
+    </div>
+</section>

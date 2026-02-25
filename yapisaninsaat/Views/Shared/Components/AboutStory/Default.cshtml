@@ -1,0 +1,18 @@
+@model yapisaninsaat.Models.Setting?
+
+@if (!string.IsNullOrEmpty(Model?.AboutContent))
+{
+<section class="about-story-section">
+    <div class="about-story-grid">
+        <div>
+            <h2 class="about-story-heading">Hikayemiz</h2>
+            <p class="about-story-subtitle">Mimari netliği yapım hassasiyetiyle birleştirerek, içten dışa zahmetsiz hissettiren yapılar inşa ediyoruz.</p>
+        </div>
+        <div>
+ <div class="about-story-body">
+  @Html.Raw(Model.AboutContent)
+            </div>
+   </div>
+    </div>
+</section>
+}

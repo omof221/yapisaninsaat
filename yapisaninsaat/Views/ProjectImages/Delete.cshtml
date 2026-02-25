@@ -1,0 +1,14 @@
+@model yapisaninsaat.Models.ProjectImage
+@{ ViewData["Title"] = "Görsel Sil"; }
+
+<h2 class="mb-4 text-danger"><i class="fas fa-trash me-2"></i>Görseli Sil</h2>
+<div class="card border-danger"><div class="card-body">
+<div class="alert alert-danger">Bu görseli silmek istediğinize emin misiniz?</div>
+<img src="@Model.ImageUrl" style="max-height:200px" class="rounded mb-3" />
+<p><strong>Proje:</strong> @Model.Project?.Title</p>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+</div></div>

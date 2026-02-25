@@ -1,0 +1,22 @@
+@model yapisaninsaat.Models.TeamMember
+@{ ViewData["Title"] = "Ekip Üyesi Sil"; }
+
+<h2 class="mb-4 text-danger"><i class="fas fa-trash me-2"></i>Ekip Üyesi Sil</h2>
+<div class="card"><div class="card-body">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+      {
+<img src="@Model.ImageUrl" style="height:60px;width:60px;object-fit:cover;border-radius:50%" />
+        }
+   <div>
+       <h5>@Model.FullName</h5>
+      <p class="text-muted mb-0">@Model.Title</p>
+        </div>
+    </div>
+    <div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-1"></i>Bu ekip üyesini silmek istediğinize emin misiniz?</div>
+    <form asp-action="Delete">
+     <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Sil</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+    </form>
+</div></div>

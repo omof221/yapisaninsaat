@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Hakkımızda";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@await Component.InvokeAsync("Navbar")
+@await Component.InvokeAsync("AboutHero")
+@await Component.InvokeAsync("AboutStory")
+@await Component.InvokeAsync("AboutProcess")
+@await Component.InvokeAsync("AboutTeam")
+@await Component.InvokeAsync("AboutQuote")
+@await Component.InvokeAsync("Footer")

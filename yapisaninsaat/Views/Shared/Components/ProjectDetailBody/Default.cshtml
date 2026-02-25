@@ -1,0 +1,59 @@
+@model yapisaninsaat.Models.Project
+@{
+    string statusText = Model.ProjectStatus == 0 ? "Devam Ediyor" : "Tamamlandı";
+}
+
+<section id="project-body">
+    <div class="project-body-grid">
+  <div>
+   <div class="section-label">Proje Hakkında</div>
+       <h2 class="project-body-heading">@Model.Title</h2>
+     <div class="project-body-copy">
+   @Html.Raw(Model.Description ?? "<p>Bu proje hakkında detaylı bilgi yakında eklenecektir.</p>")
+     </div>
+
+     <div class="project-key-points">
+     <div>
+     <div class="key-point-label">Kategori</div>
+      <div class="key-point-value">@(Model.Category?.Title ?? "—")</div>
+      </div>
+       <div>
+   <div class="key-point-label">Konum</div>
+  <div class="key-point-value">@(Model.Location ?? "—")</div>
+ </div>
+  <div>
+      <div class="key-point-label">Durum</div>
+      <div class="key-point-value">@statusText</div>
+ </div>
+      </div>
+        </div>
+
+     <aside class="project-body-side">
+         <div class="info-card">
+      <div class="info-label">Proje Bilgileri</div>
+      <div class="project-stats-row">
+     <div>
+    <div class="project-stat-label">Başlangıç</div>
+    <div class="project-stat-number" style="font-size:16px">@(Model.StartDate?.ToString("dd.MM.yyyy") ?? "—")</div>
+  </div>
+ <div>
+       <div class="project-stat-label">Bitiş</div>
+   <div class="project-stat-number" style="font-size:16px">@(Model.EndDate?.ToString("dd.MM.yyyy") ?? "—")</div>
+   </div>
+          <div>
+<div class="project-stat-label">Durum</div>
+        <div class="project-stat-number" style="font-size:16px">@statusText</div>
+         </div>
+       </div>
+     </div>
+
+  <div class="info-card">
+       <div class="info-label">İletişim</div>
+     <div class="project-contact-inner">
+      <div class="info-value">Bu proje hakkında bilgi almak ister misiniz?</div>
+       <a href="/#cta" class="btn-primary" style="text-align:center">Bize Ulaşın</a>
+        </div>
+     </div>
+  </aside>
+    </div>
+</section>

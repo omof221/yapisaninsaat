@@ -1,0 +1,38 @@
+@model List<yapisaninsaat.Models.Testimonial>
+
+@if (Model.Any())
+{
+<section id="testimonials">
+    <div class="section-header">
+   <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
+    </div>
+    <div class="testimonials-track">
+  @foreach (var item in Model)
+        {
+    <div class="testimonial-card">
+         <div class="quote-icon"><iconify-icon icon="lucide:quote" style="font-size: 32px; opacity:0.3"></iconify-icon></div>
+      <p class="testimonial-text">"@item.Comment"</p>
+       <div class="testimonial-author">
+   @if (!string.IsNullOrEmpty(item.ImageUrl))
+      {
+        <img src="@item.ImageUrl" class="author-avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt="@item.Name">
+         }
+        else
+   {
+      <div class="author-avatar" style="width:44px;height:44px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#666;">
+         @item.Name.Substring(0, 1).ToUpper()
+     </div>
+       }
+     <div>
+      <h4 style="font-size:14px;font-weight:600;">@item.Name</h4>
+          @if (!string.IsNullOrEmpty(item.Title))
+   {
+        <p style="font-size:13px;color:var(--muted-foreground)">@item.Title</p>
+    }
+       </div>
+   </div>
+ </div>
+    }
+    </div>
+</section>
+}

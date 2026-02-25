@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@await Component.InvokeAsync("Navbar")
+@await Component.InvokeAsync("HeroSlider")
+@await Component.InvokeAsync("ProjectsSection", new { status = 0, take = 4 })
+@await Component.InvokeAsync("ProjectsSection", new { status = 1, take = 6 })
+@await Component.InvokeAsync("Stats")
+@await Component.InvokeAsync("TestimonialsSection")
+@await Component.InvokeAsync("ProjectImages")
+@await Component.InvokeAsync("FaqSection")
+@await Component.InvokeAsync("ClientsSection")
+@await Component.InvokeAsync("CtaSection")
+@await Component.InvokeAsync("Footer")

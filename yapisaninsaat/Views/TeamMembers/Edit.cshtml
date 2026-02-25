@@ -1,0 +1,32 @@
+@model yapisaninsaat.Models.TeamMember
+@{ ViewData["Title"] = "Ekip Üyesi Düzenle"; }
+
+<h2 class="mb-4"><i class="fas fa-edit me-2"></i>Ekip Üyesi Düzenle</h2>
+<div class="card"><div class="card-body">
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImageUrl" />
+    <div class="row">
+  <div class="col-md-6 mb-3"><label asp-for="FullName" class="form-label">Ad Soyad</label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+   <div class="col-md-6 mb-3"><label asp-for="Title" class="form-label">Ünvan</label><input asp-for="Title" class="form-control" /></div>
+    </div>
+    <div class="mb-3"><label asp-for="Specialty" class="form-label">Uzmanlık Alanı</label><input asp-for="Specialty" class="form-control" /></div>
+    <div class="row">
+     <div class="col-md-6 mb-3">
+    <label class="form-label">Fotoğraf</label>
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+<div class="mb-2"><img src="@Model.ImageUrl" style="height:60px;width:60px;object-fit:cover;border-radius:50%" /></div>
+        }
+   <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+     <small class="text-muted">Değiştirmek istemiyorsanız boş bırakın</small>
+ </div>
+        <div class="col-md-3 mb-3"><label asp-for="Order" class="form-label">Sıra</label><input asp-for="Order" class="form-control" type="number" /></div>
+    </div>
+ <div class="form-check mb-3"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label">Aktif</label></div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

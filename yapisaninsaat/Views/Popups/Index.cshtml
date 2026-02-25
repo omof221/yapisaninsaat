@@ -1,0 +1,25 @@
+@model IEnumerable<yapisaninsaat.Models.Popup>
+@{ ViewData["Title"] = "Popup Yönetimi"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-window-restore me-2"></i>Popup Yönetimi</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Yeni Popup</a>
+</div>
+<div class="card"><div class="card-body p-0">
+<table class="table table-hover mb-0">
+<thead><tr><th>Başlık</th><th>Sayfa</th><th>Durum</th><th>Tarih</th><th class="text-end">İşlemler</th></tr></thead>
+<tbody>
+@foreach (var item in Model)
+{
+<tr>
+   <td class="fw-bold">@item.Title</td>
+    <td><span class="badge bg-info">@item.ShowOnPage</span></td>
+    <td>@(item.IsActive ? Html.Raw("<span class='badge bg-success'>Aktif</span>") : Html.Raw("<span class='badge bg-secondary'>Pasif</span>"))</td>
+ <td>@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+    <td class="text-end">
+        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+    </td>
+</tr>
+}
+</tbody></table></div></div>

@@ -1,0 +1,169 @@
+﻿@model IEnumerable<yapisaninsaat.Models.PhotoExhibition>
+@{
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+    ViewData["Title"] = "Fotoğraf Sergisi";
+
+    var categories = Model?.Select(p => p.Category)
+                          .Where(c => !string.IsNullOrEmpty(c))
+                          .Distinct()
+                          .ToList() ?? new List<string?>();
+}
+
+@* Navbar'ı RenderBody içinde çağırdığımız için özel bir kapsayıcı ekliyoruz *@
+<div class="layout-fix">
+    @await Component.InvokeAsync("Navbar")
+</div>
+
+<main class="gallery-page pt-5">
+    <section class="container mt-5 pt-5">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Fotoğraf Sergisi</h2>
+            <p class="section-desc">Yapısan İnşaat projelerinden kareler.</p>
+        </div>
+
+        @* Filtreleme Bölümü *@
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5" id="filters">
+            <button class="btn btn-outline-dark active filter-btn" data-filter="all">Tümü</button>
+            @foreach (var cat in categories)
+            {
+                <button class="btn btn-outline-dark filter-btn" data-filter="@cat?.Replace(" ", "-")">@cat</button>
+            }
+        </div>
+
+        @* Fotoğraf Grid *@
+        <div class="row g-4" id="gallery-grid">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 gallery-item @item.Category?.Replace(" ", "-")">
+                    <div class="project-card h-100 shadow-sm border-0">
+                        <div class="card-img-wrapper" style="overflow:hidden; border-radius: 8px;">
+                            <img src="@item.ImageUrl" class="img-fluid" alt="@item.Title"
+                                 style="height: 280px; width: 100%; object-fit: cover; transition: transform 0.3s;">
+                        </div>
+                        <div class="project-info mt-3 px-2">
+                            <h5 class="project-name fw-bold mb-1">@(item.Title ?? "Yapısan Proje")</h5>
+                            <span class="project-meta text-secondary small">@item.Category</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</main>
+
+<div class="layout-fix mt-5">
+    @await Component.InvokeAsync("Footer")
+</div>
+
+@section Scripts {
+    <style>
+        /* Logo ve Layout Bozulmasını Engelleyen Özel CSS */
+        .layout-fix .navbar-logo img,
+        .layout-fix .footer-logo img {
+            max-width: 180px !important; /* Görseldeki devasa logoyu dizginler */
+            height: auto !important;
+        }
+
+        .gallery-page {
+            min-height: 100vh;
+            background-color: #fff; /* Layout'tan gelebilecek çakışmaları önler */
+        }
+
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Aktif Filtre Butonu Stili */
+        .filter-btn.active {
+            background-color: #1a1a2e !important;
+            color: #fff !important;
+            border-color: #1a1a2e !important;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $(".filter-btn").click(function() {
+                $(".filter-btn").removeClass("active");
+                $(this).addClass("active");
+
+                var value = $(this).attr('data-filter');
+
+                if(value == "all") {
+                    $('.gallery-item').fadeIn('400');
+                } else {
+                    $(".gallery-item").not('.' + value).fadeOut('200');
+                    $('.gallery-item').filter('.' + value).fadeIn('400');
+                }
+            });
+        });
+    </script>
+}
+@* @model IEnumerable<yapisaninsaat.Models.PhotoExhibition>
+@{
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+    ViewData["Title"] = "Fotoğraf Sergisi";
+
+    // Kategorileri güvenli bir şekilde alıyoruz
+    var categories = Model?.Select(p => p.Category)
+                          .Where(c => !string.IsNullOrEmpty(c))
+                          .Distinct()
+                          .ToList() ?? new List<string?>();
+}
+
+@await Component.InvokeAsync("Navbar")
+
+<main class="gallery-container pt-5">
+    <section class="container mt-5">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Fotoğraf Sergisi</h2>
+            <p class="section-desc">Yapısan İnşaat projelerinden kareler.</p>
+        </div>
+
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-4" id="filters">
+            <button class="btn btn-outline-dark active filter-btn" data-filter="all">Tümü</button>
+            @foreach (var cat in categories)
+            {
+                <button class="btn btn-outline-dark filter-btn" data-filter="@cat?.Replace(" ", "-")">@cat</button>
+            }
+        </div>
+
+        <div class="row g-4" id="gallery-grid">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 gallery-item @item.Category?.Replace(" ", "-")">
+                    <div class="project-card h-100">
+                        <img src="@item.ImageUrl" class="img-fluid rounded shadow-sm" alt="@item.Title" style="height: 250px; width: 100%; object-fit: cover;">
+                        <div class="project-info mt-2">
+                            <h5 class="project-name">@(item.Title ?? "Yapısan Proje")</h5>
+                            <span class="project-meta text-muted">@item.Category</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+</main>
+
+@await Component.InvokeAsync("Footer")
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $(".filter-btn").click(function() {
+                // Aktif buton görseli
+                $(".filter-btn").removeClass("active");
+                $(this).addClass("active");
+
+                var value = $(this).attr('data-filter');
+
+                if(value == "all") {
+                    $('.gallery-item').show('300');
+                } else {
+                    $(".gallery-item").not('.' + value).hide('300');
+                    $('.gallery-item').filter('.' + value).show('300');
+                }
+            });
+        });
+    </script>
+} *@

@@ -1,0 +1,18 @@
+@model List<yapisaninsaat.Models.Statistic>
+
+@if (Model.Any())
+{
+<section id="stats">
+ <div class="container">
+  <div class="stats-container">
+@foreach (var stat in Model)
+       {
+      <div>
+    <div class="stat-number">@stat.Value</div>
+      <div class="stat-label">@stat.Title</div>
+  </div>
+            }
+        </div>
+</div>
+</section>
+}

@@ -1,0 +1,62 @@
+@model yapisaninsaat.Models.Setting
+@{
+  var services = ViewBag.Services as List<yapisaninsaat.Models.Service>;
+}
+
+<footer id="footer">
+    <div class="container">
+    <div class="footer-grid">
+    <div class="footer-brand">
+ <h3>Yapısan İnşaat</h3>
+        <p>@(Model?.FooterText ?? "Premium kalite ve mühendislik harikası yapılarla geleceği inşa eden lider marka.")</p>
+         @if (!string.IsNullOrEmpty(Model?.Address))
+  {
+     <p style="margin-top:12px;font-size:13px;opacity:0.6"><iconify-icon icon="lucide:map-pin" style="font-size:14px;margin-right:4px"></iconify-icon>@Model.Address</p>
+        }
+   </div>
+         <div class="footer-links-group">
+    <div class="footer-col">
+    <h4>Kurumsal</h4>
+          <ul>
+   <li><a href="#stats">Hakkımızda</a></li>
+      <li><a href="#testimonials">Referanslar</a></li>
+       <li><a href="#faq">SSS</a></li>
+        <li><a href="#cta">İletişim</a></li>
+     </ul>
+   </div>
+    @if (services != null && services.Any())
+   {
+  <div class="footer-col">
+ <h4>Uzmanlık</h4>
+    <ul>
+    @foreach (var svc in services)
+      {
+       <li><a href="/hizmetler/@svc.Slug">@svc.Title</a></li>
+  }
+    </ul>
+     </div>
+ }
+     <div class="footer-col">
+    <h4>İletişim</h4>
+      <ul>
+   @if (!string.IsNullOrEmpty(Model?.Phone))
+              {
+  <li><a href="tel:@Model.Phone"><iconify-icon icon="lucide:phone" style="font-size:12px;margin-right:4px"></iconify-icon>@Model.Phone</a></li>
+   }
+        @if (!string.IsNullOrEmpty(Model?.Email))
+{
+ <li><a href="mailto:@Model.Email"><iconify-icon icon="lucide:mail" style="font-size:12px;margin-right:4px"></iconify-icon>@Model.Email</a></li>
+    }
+   </ul>
+       </div>
+    </div>
+       </div>
+ <div class="footer-bottom">
+            <div>&copy; @DateTime.Now.Year Yapısan İnşaat. Tüm hakları saklıdır.</div>
+         <div style="display:flex; gap:24px">
+     <a href="#" style="color:#aaa;text-decoration:none">Gizlilik Politikası</a>
+            <a href="#" style="color:#aaa;text-decoration:none">Çerezler</a>
+   </div>
+  </div>
+    </div>
+</footer>

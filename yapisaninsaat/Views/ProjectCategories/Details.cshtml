@@ -1,0 +1,17 @@
+@model yapisaninsaat.Models.ProjectCategory
+@{ ViewData["Title"] = "Kategori Detayı"; }
+
+<h2 class="mb-4"><i class="fas fa-eye me-2"></i>@Model.Title</h2>
+<div class="card"><div class="card-body">
+<dl class="row">
+    <dt class="col-sm-3">Başlık</dt><dd class="col-sm-9">@Model.Title</dd>
+    <dt class="col-sm-3">Slug</dt><dd class="col-sm-9"><code>/@Model.Slug</code></dd>
+    <dt class="col-sm-3">Sıra</dt><dd class="col-sm-9">@Model.Order</dd>
+    <dt class="col-sm-3">Durum</dt><dd class="col-sm-9">@(Model.IsActive ? "Aktif" : "Pasif")</dd>
+    <dt class="col-sm-3">Proje Sayısı</dt><dd class="col-sm-9">@Model.Projects.Count</dd>
+</dl>
+</div></div>
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"><i class="fas fa-edit me-1"></i>Düzenle</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Listeye Dön</a>
+</div>

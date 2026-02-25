@@ -1,0 +1,26 @@
+@model List<yapisaninsaat.Models.FAQ>
+
+@if (Model.Any())
+{
+<section id="faq">
+    <div class="container">
+     <div class="section-header">
+    <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+  </div>
+  <div class="faq-wrapper">
+    @{ bool isFirst = true; }
+   @foreach (var item in Model)
+   {
+        <div class="faq-item @(isFirst ? "" : "closed")" onclick="toggleFaq(this)">
+         <div class="faq-header">
+     @item.Question
+<span class="faq-icon"><iconify-icon icon="@(isFirst ? "lucide:minus" : "lucide:plus")"></iconify-icon></span>
+ </div>
+     <div class="faq-body">@Html.Raw(item.Answer)</div>
+      </div>
+            isFirst = false;
+   }
+        </div>
+    </div>
+</section>
+}

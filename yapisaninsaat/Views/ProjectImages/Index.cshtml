@@ -1,0 +1,61 @@
+@model IEnumerable<yapisaninsaat.Models.ProjectImage>
+@{ ViewData["Title"] = "Proje Görselleri"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-images me-2"></i>Proje Görselleri</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Yeni Görsel Ekle</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-1"></i>@TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@{
+    var grouped = Model.GroupBy(pi => pi.Project?.Title ?? "Bilinmeyen").OrderBy(g => g.Key);
+}
+
+@foreach (var group in grouped)
+{
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-project-diagram me-2"></i>@group.Key</h5>
+            <span class="badge bg-primary">@group.Count() / 7 görsel</span>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                @foreach (var item in group.OrderBy(i => i.Order))
+                {
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="position-relative">
+                            <img src="@item.ImageUrl" class="rounded shadow-sm w-100" style="height:120px;object-fit:cover" />
+                            @if (item.IsCover)
+                            {
+                                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-1" style="font-size:10px"><i class="fas fa-star me-1"></i>Kapak</span>
+                            }
+                            <div class="mt-1 d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Sıra: @item.Order</small>
+                                <div>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning py-0 px-1"><i class="fas fa-edit" style="font-size:11px"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger py-0 px-1"><i class="fas fa-trash" style="font-size:11px"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="text-center text-muted py-5">
+        <i class="fas fa-image fa-3x mb-3 d-block opacity-25"></i>
+        <p>Henüz proje görseli eklenmemiş.</p>
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>İlk Görseli Ekle</a>
+    </div>
+}

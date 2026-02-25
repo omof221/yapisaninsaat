@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Projeler";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+    int? durum = ViewBag.Durum;
+    int? kategori = ViewBag.Kategori;
+}
+
+@await Component.InvokeAsync("Navbar")
+@await Component.InvokeAsync("ProjectsListHero", new { durum })
+@await Component.InvokeAsync("AllProjectsGrid", new { durum, kategori })
+@await Component.InvokeAsync("CtaSection")
+@await Component.InvokeAsync("Footer")

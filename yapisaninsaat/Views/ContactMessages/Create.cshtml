@@ -1,0 +1,18 @@
+@model yapisaninsaat.Models.ContactMessage
+@{ ViewData["Title"] = "Yeni Mesaj"; }
+
+<h2 class="mb-4"><i class="fas fa-plus me-2"></i>Yeni İletişim Mesajı</h2>
+<div class="card"><div class="card-body">
+<form asp-action="Create">
+  <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+ <div class="row">
+  <div class="col-md-4 mb-3"><label asp-for="FullName" class="form-label">Ad Soyad</label><input asp-for="FullName" class="form-control" /><span asp-validation-for="FullName" class="text-danger"></span></div>
+     <div class="col-md-4 mb-3"><label asp-for="Email" class="form-label">E-posta</label><input asp-for="Email" class="form-control" type="email" /></div>
+        <div class="col-md-4 mb-3"><label asp-for="Phone" class="form-label">Telefon</label><input asp-for="Phone" class="form-control" /></div>
+    </div>
+    <div class="mb-3"><label asp-for="Message" class="form-label">Mesaj</label><textarea asp-for="Message" class="form-control" rows="5"></textarea><span asp-validation-for="Message" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Gönder</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+</div></div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

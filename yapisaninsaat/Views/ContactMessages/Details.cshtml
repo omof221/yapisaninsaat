@@ -1,0 +1,21 @@
+@model yapisaninsaat.Models.ContactMessage
+@{ ViewData["Title"] = "Mesaj Detayı"; }
+
+<h2 class="mb-4"><i class="fas fa-envelope-open me-2"></i>Mesaj Detayı</h2>
+<div class="card"><div class="card-body">
+<dl class="row">
+    <dt class="col-sm-3">Ad Soyad</dt><dd class="col-sm-9 fw-bold">@Model.FullName</dd>
+    <dt class="col-sm-3">E-posta</dt><dd class="col-sm-9"><a href="mailto:@Model.Email">@Model.Email</a></dd>
+<dt class="col-sm-3">Telefon</dt><dd class="col-sm-9"><a href="tel:@Model.Phone">@Model.Phone</a></dd>
+    <dt class="col-sm-3">Tarih</dt><dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
+    <dt class="col-sm-3">Durum</dt><dd class="col-sm-9">@(Model.IsRead ? Html.Raw("<span class='badge bg-success'>Okundu</span>") : Html.Raw("<span class='badge bg-warning text-dark'>Yeni</span>"))</dd>
+  <dt class="col-sm-3">Mesaj</dt>
+  <dd class="col-sm-9">
+        <div class="p-3 bg-light rounded">@Model.Message</div>
+ </dd>
+</dl>
+</div></div>
+<div class="mt-3">
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Sil</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Listeye Dön</a>
+</div>

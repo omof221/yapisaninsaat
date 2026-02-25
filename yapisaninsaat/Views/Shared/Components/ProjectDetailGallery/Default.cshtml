@@ -1,0 +1,50 @@
+@model List<yapisaninsaat.Models.ProjectImage>
+
+@if (Model.Any())
+{
+<section id="project-gallery">
+    <div class="gallery-inner">
+        <div class="gallery-header-row">
+       <div>
+<div class="section-label">Galeri</div>
+   <h3 class="gallery-title">Projeden kareler</h3>
+  </div>
+     <p class="gallery-subtitle">Projenin farklı aşamalarından ve detaylarından görüntüler.</p>
+   </div>
+    <div class="gallery-grid">
+       @if (Model.Count >= 1)
+        {
+   <div class="gallery-main">
+<img src="@Model[0].ImageUrl" alt="Galeri ana görsel" />
+  </div>
+  }
+     @if (Model.Count >= 2)
+     {
+        <div class="gallery-side-col">
+      <div class="gallery-side-top">
+    <img src="@Model[1].ImageUrl" alt="Galeri görsel" />
+  </div>
+       @if (Model.Count >= 3)
+       {
+   <div class="gallery-side-bottom">
+       <img src="@Model[2].ImageUrl" alt="Galeri görsel" />
+        </div>
+       }
+      </div>
+    }
+        </div>
+
+  @if (Model.Count > 3)
+   {
+         <div class="gallery-extra-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:18px">
+      @foreach (var img in Model.Skip(3))
+  {
+      <div style="border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:var(--secondary)">
+   <img src="@img.ImageUrl" alt="Galeri görsel" style="width:100%;height:100%;object-fit:cover" />
+ </div>
+   }
+         </div>
+     }
+    </div>
+</section>
+}

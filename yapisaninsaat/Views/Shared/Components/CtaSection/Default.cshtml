@@ -1,0 +1,20 @@
+@model yapisaninsaat.Models.Setting
+
+<section id="cta">
+    <div class="container">
+ <div class="cta-box">
+   <h2 class="cta-title">Yeni Projenizi Konuşalım</h2>
+       <p class="cta-desc">Mimari vizyonunuzu gerçeğe dönüştürmek için uzman ekibimizle tanışın.</p>
+       <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+       @if (!string.IsNullOrEmpty(Model?.Phone))
+        {
+         <a class="btn-white" href="tel:@Model.Phone"><iconify-icon icon="lucide:phone" style="font-size:16px;margin-right:6px"></iconify-icon>@Model.Phone</a>
+   }
+   @if (!string.IsNullOrEmpty(Model?.Email))
+  {
+  <a class="btn-white" href="mailto:@Model.Email" style="background:transparent;color:white;border:1px solid rgba(255,255,255,0.3)"><iconify-icon icon="lucide:mail" style="font-size:16px;margin-right:6px"></iconify-icon>E-posta Gönder</a>
+          }
+     </div>
+  </div>
+    </div>
+</section>

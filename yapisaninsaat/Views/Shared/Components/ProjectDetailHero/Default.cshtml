@@ -1,0 +1,74 @@
+@model yapisaninsaat.Models.Project
+@{
+    var cover = Model.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? Model.ProjectImages?.FirstOrDefault();
+    string statusText = Model.ProjectStatus == 0 ? "Devam Ediyor" : "Tamamlandı";
+    string statusClass = Model.ProjectStatus == 0 ? "Devam Eden" : "Biten";
+}
+
+<section id="project-hero">
+    <div class="project-hero-bg">
+        @if (cover != null && !string.IsNullOrEmpty(cover.ImageUrl))
+    {
+  <img src="@cover.ImageUrl" alt="@Model.Title" />
+   }
+        else
+  {
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e)"></div>
+        }
+    </div>
+    <div class="project-hero-gradient"></div>
+    <div class="project-hero-inner">
+        <div class="project-hero-content">
+            <div>
+             <div class="project-tag-row">
+     <div class="pill-label">Proje Detayı</div>
+          <div class="pill-label">@statusText</div>
+           </div>
+ <h1 class="project-title">@Model.Title</h1>
+    @if (!string.IsNullOrEmpty(Model.ShortDescription))
+   {
+         <p class="project-subtitle">@Model.ShortDescription</p>
+    }
+       <div class="project-hero-cta-row">
+ <a href="/#cta" class="btn-primary">Teklif Al</a>
+             <a href="/" class="btn-outline">Tüm Projeler</a>
+      </div>
+  </div>
+     <aside class="project-hero-meta-panel">
+       <div class="project-meta-item">
+<div class="project-meta-label">Konum</div>
+          <div class="project-meta-value">@(Model.Location ?? "—")</div>
+     </div>
+             <div class="project-meta-item">
+     <div class="project-meta-label">Kategori</div>
+          <div class="project-meta-value">@(Model.Category?.Title ?? "—")</div>
+      </div>
+<div class="project-meta-item">
+        <div class="project-meta-label">Durum</div>
+        <div class="project-meta-value">@statusText</div>
+    </div>
+          <div class="project-meta-item">
+           <div class="project-meta-label">Tarih</div>
+     <div class="project-meta-value">
+     @if (Model.StartDate.HasValue && Model.EndDate.HasValue)
+      {
+  @Model.StartDate.Value.ToString("MM/yyyy")@: — @Model.EndDate.Value.ToString("MM/yyyy")
+    }
+   else if (Model.StartDate.HasValue)
+           {
+         @Model.StartDate.Value.ToString("MM/yyyy")@: — Devam Ediyor
+          }
+                   else
+          {
+ @:—
+       }
+ </div>
+    </div>
+         </aside>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <div class="scroll-indicator-line"></div>
+    <span>AŞAĞI KAYDIR</span>
+    </div>
+</section>

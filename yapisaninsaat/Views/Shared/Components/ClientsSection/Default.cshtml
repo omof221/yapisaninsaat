@@ -1,0 +1,40 @@
+@model List<yapisaninsaat.Models.Reference>
+
+@if (Model.Any())
+{
+<section id="clients">
+ <div class="container">
+        <div class="clients-grid">
+    @foreach (var item in Model)
+    {
+    @if (!string.IsNullOrEmpty(item.WebsiteUrl))
+        {
+            <a class="client-logo" href="@item.WebsiteUrl" target="_blank" rel="noopener">
+  @if (!string.IsNullOrEmpty(item.LogoUrl))
+     {
+  <img src="@item.LogoUrl" alt="@item.CompanyName">
+         }
+   else
+         {
+     <iconify-icon icon="lucide:hexagon"></iconify-icon>@item.CompanyName
+     }
+   </a>
+       }
+         else
+   {
+        <div class="client-logo">
+        @if (!string.IsNullOrEmpty(item.LogoUrl))
+       {
+   <img src="@item.LogoUrl" alt="@item.CompanyName">
+        }
+       else
+     {
+         <iconify-icon icon="lucide:hexagon"></iconify-icon>@item.CompanyName
+    }
+         </div>
+        }
+    }
+    </div>
+  </div>
+</section>
+}

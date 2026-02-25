@@ -1,0 +1,13 @@
+@model yapisaninsaat.Models.FAQ
+@{ ViewData["Title"] = "SSS Sil"; }
+
+<h2 class="mb-4 text-danger"><i class="fas fa-trash me-2"></i>Soruyu Sil</h2>
+<div class="card border-danger"><div class="card-body">
+<div class="alert alert-danger">Aşağıdaki soruyu silmek istediğinize emin misiniz?</div>
+<p><strong>@Model.Question</strong></p>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+</div></div>

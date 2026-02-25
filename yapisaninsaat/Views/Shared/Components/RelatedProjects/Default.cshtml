@@ -1,0 +1,40 @@
+@model List<yapisaninsaat.Models.Project>
+
+@if (Model.Any())
+{
+<section id="related-projects">
+    <div class="related-inner">
+   <div class="related-header">
+     <div>
+      <div class="section-label">Diğer Projeler</div>
+    <h3 class="related-title">Benzer projelerimiz</h3>
+     </div>
+   <p class="related-desc">İlginizi çekebilecek diğer projelerimize göz atın.</p>
+   </div>
+  <div class="related-grid">
+     @foreach (var project in Model)
+     {
+   var cover = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? project.ProjectImages?.FirstOrDefault();
+      <a class="related-card" href="/proje/@project.Slug" style="text-decoration:none;color:inherit">
+   <div class="related-img-wrap">
+    @if (cover != null && !string.IsNullOrEmpty(cover.ImageUrl))
+        {
+        <img src="@cover.ImageUrl" alt="@project.Title" />
+  }
+ else
+ {
+     <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+  <iconify-icon icon="lucide:building-2" style="font-size:48px;color:rgba(255,255,255,0.15)"></iconify-icon>
+          </div>
+    }
+       <div class="related-overlay">
+<div class="related-name">@project.Title</div>
+   <div class="related-meta">@project.Category?.Title • @project.Location</div>
+       </div>
+ </div>
+        </a>
+   }
+        </div>
+    </div>
+</section>
+}

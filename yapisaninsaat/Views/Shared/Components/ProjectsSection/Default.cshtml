@@ -1,0 +1,49 @@
+@model List<yapisaninsaat.Models.Project>
+@{
+  int status = ViewBag.Status;
+    string sectionId = status == 0 ? "ongoing-projects" : "completed-projects";
+    string sectionTitle = status == 0 ? "Devam Eden Projeler" : "Tamamlanan Projeler";
+    string sectionDesc = status == 0 ? "Şu anda yapım aşamasında olan vizyoner eserlerimiz." : "Teslim ettiğimiz ikonik yapılar.";
+}
+
+@if (Model.Any())
+{
+<section id="@sectionId" class="projects-section">
+    <div class="container">
+     <div class="project-header-row">
+            <div>
+       <h2 class="section-title">@sectionTitle</h2>
+         <p class="section-desc">@sectionDesc</p>
+        </div>
+     <a class="btn-secondary" href="/projeler?durum=@status">Tümünü Gör</a>
+        </div>
+   <div class="projects-grid">
+       @foreach (var project in Model)
+            {
+   var coverImage = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? project.ProjectImages?.FirstOrDefault();
+  <a class="project-card" href="/proje/@project.Slug">
+       @if (coverImage != null && !string.IsNullOrEmpty(coverImage.ImageUrl))
+       {
+    <img src="@coverImage.ImageUrl" alt="@project.Title">
+    }
+     else
+ {
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+  <iconify-icon icon="lucide:building-2" style="font-size:48px;color:rgba(255,255,255,0.15)"></iconify-icon>
+          </div>
+   }
+            <div class="project-info">
+      <div>
+    <div class="project-name">@project.Title</div>
+    <div class="project-meta">@project.Category?.Title • @project.Location</div>
+         </div>
+       <div class="project-arrow">
+  <iconify-icon icon="lucide:arrow-right" style="font-size: 20px;"></iconify-icon>
+  </div>
+     </div>
+ </a>
+       }
+     </div>
+    </div>
+</section>
+}

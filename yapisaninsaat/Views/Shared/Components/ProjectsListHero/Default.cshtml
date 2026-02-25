@@ -1,0 +1,29 @@
+@{
+    int? durum = ViewBag.Durum;
+string? coverImage = ViewBag.CoverImage;
+    string pageTitle = durum == 0 ? "Devam Eden Projeler" : durum == 1 ? "Tamamlanan Projeler" : "Tüm Projelerimiz";
+    string pageDesc = durum == 0
+        ? "Şu anda yapım aşamasında olan vizyoner eserlerimiz."
+  : durum == 1
+        ? "Başarıyla teslim ettiğimiz ikonik yapılar."
+        : "Devam eden ve tamamlanan tüm projelerimize göz atın.";
+}
+
+<section class="projects-list-hero">
+    @if (!string.IsNullOrEmpty(coverImage))
+ {
+        <div class="projects-list-hero-bg">
+            <img src="@coverImage" alt="@pageTitle" />
+        </div>
+    }
+  <div class="projects-list-hero-overlay"></div>
+    <div class="projects-list-hero-inner">
+        <div class="projects-list-hero-breadcrumb">
+            <a href="/" style="color:inherit;text-decoration:none;opacity:0.7">Anasayfa</a>
+            <span style="opacity:0.4;margin:0 6px">→</span>
+    <span>Projeler</span>
+        </div>
+        <h1 class="projects-list-hero-title">@pageTitle</h1>
+        <p class="projects-list-hero-desc">@pageDesc</p>
+    </div>
+</section>

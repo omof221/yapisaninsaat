@@ -1,0 +1,17 @@
+@model yapisaninsaat.Models.Testimonial?
+
+@if (Model != null)
+{
+<section class="quote-strip-section">
+    <div class="quote-strip-inner">
+    <div class="quote-content-row">
+     <div class="quote-mark">"</div>
+     <div>
+  <div class="quote-text">@Model.Comment</div>
+   <div class="quote-meta">@Model.Name@(Model.Title != null ? " · " + Model.Title : "")</div>
+     </div>
+        </div>
+     <a href="/#cta" class="quote-cta">Projenizi planlayalım</a>
+    </div>
+</section>
+}

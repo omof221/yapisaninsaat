@@ -1,0 +1,34 @@
+@model IEnumerable<yapisaninsaat.Models.Slider>
+@{ ViewData["Title"] = "Slider Yönetimi"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-images me-2"></i>Slider Yönetimi</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Yeni Slider</a>
+</div>
+
+<div class="row">
+@foreach (var item in Model)
+{
+<div class="col-md-4 mb-4">
+    <div class="card h-100">
+       <img src="@item.ImageUrl" class="card-img-top" style="height:200px;object-fit:cover" />
+        <div class="card-body">
+    <h5 class="card-title">@item.Title</h5>
+    <p class="text-muted">@item.Subtitle</p>
+     <div class="d-flex justify-content-between align-items-center">
+        <span>@(item.IsActive ? Html.Raw("<span class='badge bg-success'>Aktif</span>") : Html.Raw("<span class='badge bg-secondary'>Pasif</span>"))</span>
+    <small class="text-muted">Sıra: @item.Order</small>
+         </div>
+      @if (!string.IsNullOrEmpty(item.ButtonText))
+    {
+     <div class="mt-2"><span class="badge bg-info">@item.ButtonText → @item.ButtonUrl</span></div>
+      }
+   </div>
+     <div class="card-footer text-end bg-transparent">
+   <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+    </div>
+    </div>
+</div>
+}
+</div>

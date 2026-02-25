@@ -1,0 +1,12 @@
+@model yapisaninsaat.Models.Project
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@await Component.InvokeAsync("Navbar")
+@await Component.InvokeAsync("ProjectDetailHero", new { project = Model })
+@await Component.InvokeAsync("ProjectDetailBody", new { project = Model })
+@await Component.InvokeAsync("ProjectDetailGallery", new { project = Model })
+@await Component.InvokeAsync("RelatedProjects", new { currentProjectId = Model.Id, categoryId = Model.CategoryId })
+@await Component.InvokeAsync("Footer")

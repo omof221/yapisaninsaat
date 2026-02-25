@@ -1,0 +1,36 @@
+@model List<yapisaninsaat.Models.Service>
+
+@if (Model.Any())
+{
+<section class="process-section">
+    <div class="process-inner">
+  <div class="section-kicker">Süreç</div>
+  <h2 class="section-title">Hizmet alanlarımız</h2>
+      <div class="process-grid">
+   <p class="process-intro">
+      Entegre ekip yapımız sayesinde her proje, aynı disiplinli süreçten geçer. Mimarlık, mühendislik ve saha ekipleri tam senkronizasyonda çalışır.
+   </p>
+     <div class="process-timeline">
+   @{ int stepIndex = 1; }
+     @foreach (var service in Model)
+    {
+       <div class="process-step">
+    <div class="process-step-index-wrap">
+     <div class="process-step-index">@stepIndex.ToString("D2")</div>
+     @if (stepIndex < Model.Count)
+          {
+   <div class="process-step-line"></div>
+   }
+ </div>
+     <div>
+ <div class="process-step-title">@service.Title</div>
+        <div class="process-step-text">@(service.ShortDescription ?? "")</div>
+                    </div>
+  </div>
+     stepIndex++;
+  }
+    </div>
+     </div>
+    </div>
+</section>
+}

@@ -1,0 +1,32 @@
+@using yapisaninsaat.Models
+@{
+  var settings = ViewBag.Settings as Setting;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>@ViewData["Title"] - Yapısan İnşaat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+    @if (settings?.FaviconUrl != null)
+    {
+  <link rel="icon" href="@settings.FaviconUrl" />
+}
+    @Html.Raw(settings?.HeaderScript ?? "")
+<link rel="stylesheet" href="~/css/front.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="page-wrapper">
+    <div id="toast" class="toast-message"></div>
+        @RenderBody()
+  </div>
+
+    <script src="~/js/front.js" asp-append-version="true"></script>
+    @Html.Raw(settings?.FooterScript ?? "")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

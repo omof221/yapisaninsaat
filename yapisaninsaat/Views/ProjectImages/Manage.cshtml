@@ -1,0 +1,170 @@
+@model yapisaninsaat.Models.Project
+@{ ViewData["Title"] = $"{Model.Title} - Görseller"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+  <h2><i class="fas fa-images me-2"></i>@Model.Title</h2>
+     <p class="text-muted mb-0">Proje görselleri yönetimi · <span class="fw-bold">@Model.ProjectImages.Count / 7</span> görsel</p>
+  </div>
+    <a asp-controller="Projects" asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Projelere Dön</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+    <i class="fas fa-check-circle me-1"></i>@TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@{
+    var cover = Model.ProjectImages.FirstOrDefault(pi => pi.IsCover);
+    var extras = Model.ProjectImages.Where(pi => !pi.IsCover).OrderBy(pi => pi.Order).ToList();
+    var canAddExtras = extras.Count < 6;
+}
+
+<!-- KAPAK FOTOĞRAFI -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:#1a1a2e;color:#fff">
+        <span><i class="fas fa-star me-2"></i>Kapak Fotoğrafı</span>
+        @if (cover != null)
+        {
+    <span class="badge bg-success">Yüklü</span>
+     }
+        else
+        {
+    <span class="badge bg-danger">Eksik</span>
+  }
+    </div>
+    <div class="card-body">
+  @if (cover != null)
+        {
+   <div class="row align-items-center">
+     <div class="col-md-5">
+      <img src="@cover.ImageUrl" class="rounded shadow w-100" style="max-height:280px;object-fit:cover" />
+ </div>
+      <div class="col-md-7 mt-3 mt-md-0">
+   <p class="text-muted mb-2">Bu fotoğraf anasayfa kartlarında ve proje slider'ında görünür.</p>
+    <form asp-action="Upload" enctype="multipart/form-data" class="d-flex align-items-end gap-2 flex-wrap">
+     <input type="hidden" name="ProjectId" value="@Model.Id" />
+     <div>
+      <label class="form-label small fw-bold">Kapağı Değiştir</label>
+     <input type="file" name="CoverFile" class="form-control" accept="image/*" required />
+     </div>
+    <button type="submit" class="btn btn-warning"><i class="fas fa-sync me-1"></i>Değiştir</button>
+       </form>
+        <hr />
+        <form asp-action="DeleteImage" method="post" class="d-inline" onsubmit="return confirm('Kapak fotoğrafını silmek istediğinize emin misiniz?')">
+          <input type="hidden" name="id" value="@cover.Id" />
+      <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash me-1"></i>Kapağı Sil</button>
+    </form>
+        </div>
+     </div>
+  }
+ else
+     {
+    <form asp-action="Upload" enctype="multipart/form-data">
+      <input type="hidden" name="ProjectId" value="@Model.Id" />
+  <p class="text-muted mb-3"><i class="fas fa-info-circle me-1"></i>Henüz kapak fotoğrafı yüklenmemiş. Bu fotoğraf anasayfa kartlarında ve slider'da görünür.</p>
+     <div class="row">
+     <div class="col-md-6">
+ <input type="file" name="CoverFile" class="form-control" accept="image/*" required />
+         </div>
+     <div class="col-md-3">
+   <button type="submit" class="btn btn-primary w-100"><i class="fas fa-upload me-1"></i>Kapak Yükle</button>
+  </div>
+      </div>
+    </form>
+     }
+    </div>
+</div>
+
+<!-- EK FOTOĞRAFLAR -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
+  <span><i class="fas fa-images me-2"></i>Ek Fotoğraflar</span>
+  <span class="badge bg-light text-dark">@extras.Count / 6</span>
+    </div>
+    <div class="card-body">
+        @if (extras.Any())
+  {
+      <div class="row g-3 mb-4">
+      @foreach (var img in extras)
+     {
+       <div class="col-6 col-md-4 col-lg-3">
+   <div class="position-relative">
+ <img src="@img.ImageUrl" class="rounded shadow-sm w-100" style="height:160px;object-fit:cover" />
+      <div class="position-absolute top-0 end-0 m-1 d-flex gap-1">
+       <form asp-action="SetCover" method="post" class="d-inline">
+    <input type="hidden" name="id" value="@img.Id" />
+ <button type="submit" class="btn btn-sm btn-warning py-0 px-1" title="Kapak yap"><i class="fas fa-star" style="font-size:11px"></i></button>
+            </form>
+         <form asp-action="DeleteImage" method="post" class="d-inline" onsubmit="return confirm('Bu görseli silmek istediğinize emin misiniz?')">
+   <input type="hidden" name="id" value="@img.Id" />
+        <button type="submit" class="btn btn-sm btn-danger py-0 px-1" title="Sil"><i class="fas fa-trash" style="font-size:11px"></i></button>
+     </form>
+     </div>
+   </div>
+     </div>
+      }
+   </div>
+ }
+        else
+        {
+ <p class="text-muted mb-3"><i class="fas fa-info-circle me-1"></i>Henüz ek fotoğraf yüklenmemiş.</p>
+    }
+
+      @if (canAddExtras)
+        {
+  <hr />
+ <form asp-action="Upload" enctype="multipart/form-data">
+       <input type="hidden" name="ProjectId" value="@Model.Id" />
+        <label class="form-label fw-bold"><i class="fas fa-plus me-1"></i>Ek Fotoğraf Ekle <small class="text-muted fw-normal">(en fazla @(6 - extras.Count) adet daha)</small></label>
+     <div class="row">
+              <div class="col-md-7">
+  <input type="file" name="AdditionalFiles" class="form-control" accept="image/*" multiple id="addInput" />
+      </div>
+ <div class="col-md-3 mt-2 mt-md-0">
+         <button type="submit" class="btn btn-primary w-100"><i class="fas fa-upload me-1"></i>Yükle</button>
+      </div>
+    </div>
+   <div id="addPreview" class="d-flex flex-wrap gap-3 mt-3"></div>
+        </form>
+        }
+    else
+        {
+  <div class="alert alert-info mb-0"><i class="fas fa-info-circle me-1"></i>Maksimum ek fotoğraf sayısına (6) ulaşıldı. Yeni eklemek için mevcut bir görseli silin.</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    var addInput = document.getElementById('addInput');
+    if (addInput) {
+ var maxSlots = @(6 - extras.Count);
+        addInput.addEventListener('change', function () {
+      var container = document.getElementById('addPreview');
+   container.innerHTML = '';
+  var files = Array.from(this.files).slice(0, maxSlots);
+        files.forEach(function (file, i) {
+        var reader = new FileReader();
+           reader.onload = function (ev) {
+            var div = document.createElement('div');
+            div.style.position = 'relative';
+  div.innerHTML = '<img src="' + ev.target.result + '" class="rounded shadow-sm" style="height:90px;width:130px;object-fit:cover" />' +
+         '<span class="badge bg-dark" style="position:absolute;top:4px;left:4px;font-size:10px">' + (i + 1) + '</span>';
+ container.appendChild(div);
+  };
+     reader.readAsDataURL(file);
+      });
+            if (this.files.length > maxSlots) {
+          var warn = document.createElement('div');
+         warn.className = 'alert alert-warning mt-2 py-1 small';
+       warn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>En fazla ' + maxSlots + ' adet daha ekleyebilirsiniz. Fazlası yüklenmeyecektir.';
+    container.parentNode.appendChild(warn);
+  }
+        });
+    }
+</script>
+}

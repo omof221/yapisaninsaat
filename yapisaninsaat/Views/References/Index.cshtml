@@ -1,0 +1,33 @@
+@model IEnumerable<yapisaninsaat.Models.Reference>
+@{ ViewData["Title"] = "Referanslar"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-handshake me-2"></i>Referanslar</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Yeni Referans</a>
+</div>
+
+<div class="row">
+@foreach (var item in Model)
+{
+<div class="col-md-3 mb-4">
+    <div class="card text-center h-100">
+       <div class="card-body d-flex flex-column align-items-center justify-content-center">
+            @if (!string.IsNullOrEmpty(item.LogoUrl))
+    {
+       <img src="@item.LogoUrl" style="max-height:80px;max-width:150px" class="mb-2" />
+}
+ <h6 class="fw-bold">@item.CompanyName</h6>
+            @if (!string.IsNullOrEmpty(item.WebsiteUrl))
+    {
+     <a href="@item.WebsiteUrl" target="_blank" class="small text-muted"><i class="fas fa-external-link-alt me-1"></i>Web Sitesi</a>
+   }
+        <span class="mt-2">@(item.IsActive ? Html.Raw("<span class='badge bg-success'>Aktif</span>") : Html.Raw("<span class='badge bg-secondary'>Pasif</span>"))</span>
+        </div>
+     <div class="card-footer text-end bg-transparent">
+     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+   </div>
+    </div>
+</div>
+}
+</div>

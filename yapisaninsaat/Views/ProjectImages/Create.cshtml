@@ -1,0 +1,125 @@
+@model yapisaninsaat.Models.ProjectImage
+@{ ViewData["Title"] = "Yeni Proje Görselleri"; }
+
+<h2 class="mb-4"><i class="fas fa-plus me-2"></i>Yeni Proje Görselleri</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+      {
+         <div><i class="fas fa-exclamation-circle me-1"></i>@error.ErrorMessage</div>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <!-- Proje Seçimi -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white"><i class="fas fa-project-diagram me-2"></i>Proje Seçimi</div>
+        <div class="card-body">
+            <div class="col-md-6">
+       <label class="form-label fw-bold">Proje</label>
+        <select name="ProjectId" class="form-select" required>
+          <option value="">-- Proje Seçin --</option>
+        @foreach (SelectListItem item in (ViewBag.Projects as SelectList)!)
+
+    {
+    <option value="@item.Value">@item.Text</option>
+    }
+
+     </select>
+      </div>
+        </div>
+    </div>
+
+    <!-- Kapak Fotoğrafı -->
+    <div class="card mb-4">
+        <div class="card-header" style="background:#1a1a2e;color:#fff">
+            <i class="fas fa-star me-2"></i>Kapak Fotoğrafı <span class="badge bg-danger ms-2">Zorunlu</span>
+        </div>
+        <div class="card-body">
+         <p class="text-muted small mb-3">Bu fotoğraf proje kartlarında ve slider'da ana görsel olarak kullanılacaktır.</p>
+      <div class="row align-items-center">
+    <div class="col-md-6">
+     <input type="file" name="CoverFile" id="coverInput" class="form-control" accept="image/*" required />
+            </div>
+     <div class="col-md-6">
+         <div id="coverPreview" class="d-none">
+      <img id="coverImg" class="rounded shadow-sm" style="max-height:160px;max-width:100%;object-fit:cover" />
+         </div>
+        </div>
+            </div>
+  </div>
+    </div>
+
+    <!-- Ek Fotoğraflar -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <i class="fas fa-images me-2"></i>Ek Fotoğraflar <span class="badge bg-light text-dark ms-2">Opsiyonel · Maksimum 6</span>
+        </div>
+        <div class="card-body">
+       <p class="text-muted small mb-3">Proje detay sayfasında gösterilecek ek görseller. Birden fazla dosya seçebilirsiniz.</p>
+      <input type="file" name="AdditionalFiles" id="additionalInput" class="form-control" accept="image/*" multiple />
+       <small class="text-muted d-block mt-1">En fazla 6 adet ek fotoğraf yükleyebilirsiniz.</small>
+            <div id="additionalPreview" class="d-flex flex-wrap gap-3 mt-3"></div>
+            <div id="limitWarning" class="alert alert-warning mt-2 d-none">
+       <i class="fas fa-exclamation-triangle me-1"></i>En fazla 6 ek fotoğraf seçebilirsiniz. Sadece ilk 6 tanesi yüklenecektir.
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-upload me-2"></i>Görselleri Yükle</button>
+      <a asp-action="Index" class="btn btn-secondary btn-lg">İptal</a>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    // Kapak önizleme
+    document.getElementById('coverInput').addEventListener('change', function (e) {
+        const preview = document.getElementById('coverPreview');
+        const img = document.getElementById('coverImg');
+        if (this.files && this.files[0]) {
+       const reader = new FileReader();
+  reader.onload = function (ev) {
+  img.src = ev.target.result;
+        preview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(this.files[0]);
+        } else {
+    preview.classList.add('d-none');
+        }
+    });
+
+    // Ek fotoğraflar önizleme + limit
+    document.getElementById('additionalInput').addEventListener('change', function (e) {
+        const container = document.getElementById('additionalPreview');
+        const warning = document.getElementById('limitWarning');
+        container.innerHTML = '';
+
+    if (this.files.length > 6) {
+            warning.classList.remove('d-none');
+        } else {
+    warning.classList.add('d-none');
+   }
+
+ const filesToShow = Array.from(this.files).slice(0, 6);
+     filesToShow.forEach((file, i) => {
+            const reader = new FileReader();
+ reader.onload = function (ev) {
+       const div = document.createElement('div');
+     div.style.cssText = 'position:relative;';
+  div.innerHTML = `
+         <img src="${ev.target.result}" class="rounded shadow-sm" style="height:100px;width:140px;object-fit:cover" />
+        <span class="badge bg-dark" style="position:absolute;top:4px;left:4px;font-size:10px">${i + 1}</span>
+ `;
+                container.appendChild(div);
+          };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+}

@@ -1,0 +1,74 @@
+@model List<yapisaninsaat.Models.Project>
+@{
+    var sliders = ViewBag.Sliders as List<yapisaninsaat.Models.Slider>;
+    var heroSlider = sliders?.FirstOrDefault();
+}
+<section id="hero">
+    <div class="hero-bg">
+        @if (heroSlider != null && !string.IsNullOrEmpty(heroSlider.ImageUrl))
+        {
+            <img src="@heroSlider.ImageUrl" alt="@heroSlider.Title">
+        }
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-text" style="padding-top: 80px;">
+            @if (heroSlider != null)
+            {
+                @if (!string.IsNullOrEmpty(heroSlider.Title))
+                {
+                    <h1 class="hero-title">@heroSlider.Title</h1>
+                }
+                @if (!string.IsNullOrEmpty(heroSlider.Subtitle))
+                {
+                    <div class="hero-tag">@heroSlider.Subtitle</div>
+                }
+            }
+        </div>
+        @if (Model.Any())
+        {
+            <div class="hero-slider">
+                <div class="slider-header">
+                    <span class="slider-title-large">ÖNE ÇIKAN PROJELER</span>
+                    <div class="slider-controls">
+                        <button class="slider-btn" id="sliderPrevBtn" aria-label="Önceki proje">
+                            <iconify-icon icon="lucify:arrow-left" style="font-size: 20px;"></iconify-icon>
+                        </button>
+                        <button class="slider-btn" id="sliderNextBtn" aria-label="Sonraki proje">
+                            <iconify-icon icon="lucify:arrow-right" style="font-size: 20px;"></iconify-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="sliderTrack">
+                        @foreach (var project in Model)
+                        {
+                            var coverImage = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? project.ProjectImages?.FirstOrDefault();
+                            <a class="slider-item" href="/proje/@project.Slug">
+                                @if (coverImage != null && !string.IsNullOrEmpty(coverImage.ImageUrl))
+                                {
+                                    <img src="@coverImage.ImageUrl" alt="@project.Title">
+                                }
+                                else
+                                {
+                                    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
+                                        <iconify-icon icon="lucify:building-2" style="font-size:64px;color:rgba(255,255,255,0.15)"></iconify-icon>
+                                    </div>
+                                }
+                                <div class="slider-item-info">
+                                    <div>
+                                        <div class="slider-item-name">@project.Title</div>
+                                        <div class="slider-item-meta">@project.Category?.Title • @project.Location</div>
+                                    </div>
+                                    <div class="slider-item-arrow">
+                                        <iconify-icon icon="lucify:arrow-right" style="font-size: 20px;"></iconify-icon>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

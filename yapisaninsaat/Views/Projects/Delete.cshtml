@@ -1,0 +1,16 @@
+@model yapisaninsaat.Models.Project
+@{ ViewData["Title"] = "Proje Sil"; }
+
+<h2 class="mb-4 text-danger"><i class="fas fa-trash me-2"></i>Projeyi Sil</h2>
+<div class="card border-danger"><div class="card-body">
+<div class="alert alert-danger"><strong>@Model.Title</strong> projesini ve tüm görsellerini silmek istediğinize emin misiniz?</div>
+<dl class="row">
+    <dt class="col-sm-3">Başlık</dt><dd class="col-sm-9">@Model.Title</dd>
+    <dt class="col-sm-3">Kategori</dt><dd class="col-sm-9">@Model.Category?.Title</dd>
+</dl>
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>
+</div></div>

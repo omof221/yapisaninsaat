@@ -1,0 +1,41 @@
+@model List<yapisaninsaat.Models.TeamMember>
+
+@if (Model.Any())
+{
+<section class="team-section">
+    <div class="team-inner">
+  <div>
+     <div class="team-kicker">Ekip</div>
+      <h2 class="team-heading">Tek çatı altında disiplinler arası liderlik.</h2>
+       <p class="team-copy">Liderlik ekibimiz mimarlık, yapısal mühendislik, iç tasarım ve saha teslimatını kapsar.</p>
+ </div>
+        <div class="team-list">
+     @foreach (var member in Model)
+      {
+     <div class="team-card">
+     <div class="team-card-header">
+          <div class="team-avatar-wrap">
+    @if (!string.IsNullOrEmpty(member.ImageUrl))
+      {
+           <img src="@member.ImageUrl" alt="@member.FullName" />
+      }
+      else
+ {
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#2d2d5e);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-weight:700;font-size:14px">@member.FullName[0]</div>
+   }
+     </div>
+  <div>
+<div class="team-name">@member.FullName</div>
+    <div class="team-role">@(member.Title ?? "")</div>
+ </div>
+    </div>
+   @if (!string.IsNullOrEmpty(member.Specialty))
+  {
+     <div class="team-specialty">@member.Specialty</div>
+     }
+   </div>
+     }
+  </div>
+    </div>
+</section>
+}

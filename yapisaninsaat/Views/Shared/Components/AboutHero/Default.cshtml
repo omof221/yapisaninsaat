@@ -1,0 +1,45 @@
+@using yapisaninsaat.Models
+@model yapisaninsaat.Models.Setting?
+@{
+    var settings = Model;
+    var services = ViewBag.Services as List<Service> ?? new List<Service>();
+    string companyName = settings?.CompanyName ?? "Yapısan İnşaat";
+    string servicesChip = services.Any() ? string.Join(" | ", services.Take(3).Select(s => s.Title)) : "Mimarlık | Mühendislik | İç Tasarım";
+}
+
+<section class="about-hero">
+    <div class="about-hero-inner">
+        <div>
+            <div class="about-hero-badge-row">
+    <div class="about-breadcrumb">@companyName • Hakkımızda</div>
+ <div class="about-meta-chip-group">
+   <div class="about-meta-chip">@servicesChip</div>
+     </div>
+  </div>
+     <h1 class="about-hero-title">
+  @(settings?.AboutTitle ?? "Sessiz, hassas inşaat zanaatı.")
+ </h1>
+     <p class="about-hero-lead">
+@(settings?.AboutSubtitle ?? "Detaya takıntılı bir özenle sakin, kalıcı yapılar tasarlayan ve inşa eden çok disiplinli bir firma.")
+  </p>
+     <div class="about-hero-grid-meta">
+     <div class="about-meta-block">
+  <div class="about-meta-label">Kuruluş</div>
+    <div class="about-meta-value">@(settings?.FoundedYear ?? "—")</div>
+    </div>
+ <div class="about-meta-block">
+          <div class="about-meta-label">Uzmanlık</div>
+ <div class="about-meta-value">@(settings?.Expertise ?? "—")</div>
+</div>
+   <div class="about-meta-block">
+          <div class="about-meta-label">Hizmet Modeli</div>
+   <div class="about-meta-value">@(settings?.DeliveryModel ?? "—")</div>
+         </div>
+     </div>
+        </div>
+
+        <div class="about-hero-media">
+            <img class="about-hero-image" src="@settings?.AboutImageUrl" alt="@companyName" />
+        </div>
+    </div>
+</section>

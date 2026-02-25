@@ -1,0 +1,34 @@
+@model IEnumerable<yapisaninsaat.Models.FAQ>
+@{ ViewData["Title"] = "Sıkça Sorulan Sorular"; }
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-question-circle me-2"></i>SSS</h2>
+    <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Yeni Soru</a>
+</div>
+
+<div class="accordion" id="faqAccordion">
+@{ int index = 0; }
+@foreach (var item in Model)
+{
+<div class="accordion-item mb-2" style="border-radius:8px;overflow:hidden">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed d-flex justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#faq-@item.Id">
+   <span><strong class="me-2">@item.Order.</strong> @item.Question</span>
+        </button>
+    </h2>
+    <div id="faq-@item.Id" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+        <div class="accordion-body">
+      <p>@Html.Raw(item.Answer)</p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+   <span>@(item.IsActive ? Html.Raw("<span class='badge bg-success'>Aktif</span>") : Html.Raw("<span class='badge bg-secondary'>Pasif</span>"))</span>
+          <div>
+        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning"><i class="fas fa-edit"></i></a>
+    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+     </div>
+   </div>
+        </div>
+    </div>
+</div>
+index++;
+}
+</div>
