@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using yapisaninsaat.Models;
 
 namespace yapisaninsaat.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ContactMessagesController : Controller
     {
         private readonly AppDbContext _context;
@@ -45,6 +47,20 @@ if (ModelState.IsValid) { item.CreatedDate = DateTime.Now; _context.Add(item); a
     if (item != null) _context.ContactMessages.Remove(item);
      await _context.SaveChangesAsync();
   return RedirectToAction(nameof(Index));
+        }
+
+        [AllowAnonymous]
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePublic(ContactMessage item)
+        {
+   if (!ModelState.IsValid)
+    return BadRequest();
+
+        item.CreatedDate = DateTime.Now;
+  item.IsRead = false;
+       _context.Add(item);
+     await _context.SaveChangesAsync();
+     return Ok();
         }
     }
 }

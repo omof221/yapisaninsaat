@@ -2,37 +2,178 @@
 
 @if (Model.Any())
 {
-<section id="testimonials">
-    <div class="section-header">
-   <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
-    </div>
-    <div class="testimonials-track">
-  @foreach (var item in Model)
-        {
-    <div class="testimonial-card">
-         <div class="quote-icon"><iconify-icon icon="lucide:quote" style="font-size: 32px; opacity:0.3"></iconify-icon></div>
-      <p class="testimonial-text">"@item.Comment"</p>
-       <div class="testimonial-author">
-   @if (!string.IsNullOrEmpty(item.ImageUrl))
-      {
-        <img src="@item.ImageUrl" class="author-avatar" style="width:44px;height:44px;border-radius:50%;object-fit:cover" alt="@item.Name">
-         }
-        else
-   {
-      <div class="author-avatar" style="width:44px;height:44px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#666;">
-         @item.Name.Substring(0, 1).ToUpper()
-     </div>
-       }
-     <div>
-      <h4 style="font-size:14px;font-weight:600;">@item.Name</h4>
-          @if (!string.IsNullOrEmpty(item.Title))
-   {
-        <p style="font-size:13px;color:var(--muted-foreground)">@item.Title</p>
-    }
-       </div>
-   </div>
- </div>
-    }
-    </div>
-</section>
+    <section id="testimonials">
+        <div class="t-container">
+            <div class="section-label-row">
+                <span class="section-label">Referanslar</span>
+                <div class="label-line"></div>
+            </div>
+            <h2 class="t-section-title">Müşterilerimiz Ne Diyor?</h2>
+
+            <div class="t-grid">
+                @foreach (var item in Model)
+                {
+                    <div class="t-card">
+                        <div class="t-quote-icon">
+                            <svg width="28" height="22" viewBox="0 0 28 22" fill="none">
+                                <path d="M0 22V13.2C0 9.67 0.967 6.8 2.9 4.6C4.867 2.4 7.6 1.033 11.1 0.5L12 3C9.8 3.6 8.133 4.567 7 5.9C5.9 7.2 5.35 8.733 5.35 10.5H10.5V22H0ZM16.5 22V13.2C16.5 9.67 17.467 6.8 19.4 4.6C21.367 2.4 24.1 1.033 27.6 0.5L28.5 3C26.3 3.6 24.633 4.567 23.5 5.9C22.4 7.2 21.85 8.733 21.85 10.5H27V22H16.5Z" fill="#c0392b" opacity="0.15" />
+                            </svg>
+                        </div>
+                        <p class="t-text">@item.Comment</p>
+                        <div class="t-author">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" class="t-avatar" alt="@item.Name">
+                            }
+                            else
+                            {
+                                <div class="t-avatar t-avatar-initial">@item.Name.Substring(0, 1).ToUpper()</div>
+                            }
+                            <div class="t-author-info">
+                                <span class="t-author-name">@item.Name</span>
+                                @if (!string.IsNullOrEmpty(item.Title))
+                                {
+                                    <span class="t-author-title">@item.Title</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
 }
+
+<style>
+    #testimonials {
+        padding: 80px 0;
+        background: #f7f7f7;
+    }
+
+    .t-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 32px;
+    }
+
+    .section-label-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #c0392b;
+        white-space: nowrap;
+    }
+
+    .label-line {
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+    }
+
+    .t-section-title {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        font-weight: 800;
+        color: #1a1a1a;
+        margin: 0 0 40px;
+        letter-spacing: -0.02em;
+    }
+
+    /* GRID */
+    .t-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    /* KART */
+    .t-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 28px 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+        .t-card:hover {
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+        }
+
+    .t-text {
+        font-size: 14px;
+        line-height: 1.75;
+        color: #555;
+        margin: 0;
+        flex: 1;
+        font-style: italic;
+    }
+
+    /* YAZAR */
+    .t-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .t-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .t-avatar-initial {
+        background: #c0392b;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .t-author-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .t-author-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+
+    .t-author-title {
+        font-size: 12px;
+        color: #999;
+    }
+
+    @@media (max-width: 768px) {
+        #testimonials {
+            padding: 56px 0;
+        }
+
+        .t-container {
+            padding: 0 20px;
+        }
+
+        .t-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

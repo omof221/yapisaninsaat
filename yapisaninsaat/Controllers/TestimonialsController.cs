@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using yapisaninsaat.Helpers;
@@ -5,6 +6,7 @@ using yapisaninsaat.Models;
 
 namespace yapisaninsaat.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TestimonialsController : Controller
   {
         private readonly AppDbContext _context;

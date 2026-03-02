@@ -1,20 +1,161 @@
 @model yapisaninsaat.Models.Setting
 
 <section id="cta">
-    <div class="container">
- <div class="cta-box">
-   <h2 class="cta-title">Yeni Projenizi Konuşalım</h2>
-       <p class="cta-desc">Mimari vizyonunuzu gerçeğe dönüştürmek için uzman ekibimizle tanışın.</p>
-       <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-       @if (!string.IsNullOrEmpty(Model?.Phone))
-        {
-         <a class="btn-white" href="tel:@Model.Phone"><iconify-icon icon="lucide:phone" style="font-size:16px;margin-right:6px"></iconify-icon>@Model.Phone</a>
-   }
-   @if (!string.IsNullOrEmpty(Model?.Email))
-  {
-  <a class="btn-white" href="mailto:@Model.Email" style="background:transparent;color:white;border:1px solid rgba(255,255,255,0.3)"><iconify-icon icon="lucide:mail" style="font-size:16px;margin-right:6px"></iconify-icon>E-posta Gönder</a>
-          }
-     </div>
-  </div>
+    <div class="cta-container">
+        <div class="cta-box">
+            <div class="cta-content">
+                <span class="cta-label">Hemen Başlayalım</span>
+                <h2 class="cta-title">Yeni Projenizi Konuşalım</h2>
+                <p class="cta-desc">Mimari vizyonunuzu gerçeğe dönüştürmek için uzman ekibimizle iletişime geçin.</p>
+            </div>
+            <div class="cta-actions">
+                @if (!string.IsNullOrEmpty(Model?.Phone))
+                {
+                    <a class="cta-btn-primary" href="tel:@Model.Phone">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 11.1a19.79 19.79 0 01-3.07-8.67A2 2 0 012.01 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" /></svg>
+                        @Model.Phone
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model?.Email))
+                {
+                    <a class="cta-btn-secondary" href="mailto:@Model.Email">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                        E-posta Gönder
+                    </a>
+                }
+            </div>
+        </div>
     </div>
 </section>
+
+<style>
+    #cta {
+        padding: 80px 0;
+        background: #1a1a1a;
+    }
+
+    .cta-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 32px;
+    }
+
+    .cta-box {
+        background: #c0392b;
+        border-radius: 8px;
+        padding: 56px 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .cta-content {
+        flex: 1;
+        min-width: 260px;
+    }
+
+    .cta-label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.65);
+        margin-bottom: 12px;
+    }
+
+    .cta-title {
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        font-weight: 800;
+        color: #fff;
+        margin: 0 0 12px;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+
+    .cta-desc {
+        font-size: 14px;
+        color: rgba(255,255,255,0.75);
+        margin: 0;
+        line-height: 1.65;
+    }
+
+    .cta-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .cta-btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 28px;
+        background: #fff;
+        color: #c0392b;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        border-radius: 4px;
+        transition: background 0.2s, transform 0.2s;
+        white-space: nowrap;
+    }
+
+        .cta-btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+    .cta-btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 28px;
+        background: transparent;
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        border: 2px solid rgba(255,255,255,0.4);
+        border-radius: 4px;
+        transition: border-color 0.2s, background 0.2s;
+        white-space: nowrap;
+    }
+
+        .cta-btn-secondary:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+
+    @@media (max-width: 768px) {
+        #cta {
+            padding: 56px 0;
+        }
+
+        .cta-container {
+            padding: 0 20px;
+        }
+
+        .cta-box {
+            padding: 36px 28px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 28px;
+        }
+
+        .cta-actions {
+            width: 100%;
+        }
+
+        .cta-btn-primary, .cta-btn-secondary {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+</style>

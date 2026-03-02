@@ -2,39 +2,217 @@
 
 @if (Model.Any())
 {
-<section id="clients">
- <div class="container">
-        <div class="clients-grid">
-    @foreach (var item in Model)
-    {
-    @if (!string.IsNullOrEmpty(item.WebsiteUrl))
-        {
-            <a class="client-logo" href="@item.WebsiteUrl" target="_blank" rel="noopener">
-  @if (!string.IsNullOrEmpty(item.LogoUrl))
-     {
-  <img src="@item.LogoUrl" alt="@item.CompanyName">
-         }
-   else
-         {
-     <iconify-icon icon="lucide:hexagon"></iconify-icon>@item.CompanyName
-     }
-   </a>
-       }
-         else
-   {
-        <div class="client-logo">
-        @if (!string.IsNullOrEmpty(item.LogoUrl))
-       {
-   <img src="@item.LogoUrl" alt="@item.CompanyName">
-        }
-       else
-     {
-         <iconify-icon icon="lucide:hexagon"></iconify-icon>@item.CompanyName
-    }
-         </div>
-        }
-    }
-    </div>
-  </div>
-</section>
+    <section id="clients">
+        <div class="cl-container">
+            <div class="section-label-row">
+                <span class="section-label">Referanslarımız</span>
+                <div class="label-line"></div>
+            </div>
+            <h2 class="cl-title">Birlikte Çalıştığımız Markalar</h2>
+
+            <div class="cl-track-wrap">
+                <div class="cl-track">
+                    @* Orijinal liste *@
+                    @foreach (var item in Model)
+                    {
+                        if (!string.IsNullOrEmpty(item.WebsiteUrl))
+                        {
+                            <a class="cl-item" href="@item.WebsiteUrl" target="_blank" rel="noopener">
+                                @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                {
+                                    <img src="@item.LogoUrl" alt="@item.CompanyName" loading="lazy">
+                                }
+                                else
+                                {
+                                    <span class="cl-name">@item.CompanyName</span>
+                                }
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="cl-item">
+                                @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                {
+                                    <img src="@item.LogoUrl" alt="@item.CompanyName" loading="lazy">
+                                }
+                                else
+                                {
+                                    <span class="cl-name">@item.CompanyName</span>
+                                }
+                            </div>
+                        }
+                    }
+                    @* Sonsuz marquee için duplikasyon *@
+                    @foreach (var item in Model)
+                    {
+                        if (!string.IsNullOrEmpty(item.WebsiteUrl))
+                        {
+                            <a class="cl-item" href="@item.WebsiteUrl" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+                                @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                {
+                                    <img src="@item.LogoUrl" alt="" loading="lazy">
+                                }
+                                else
+                                {
+                                    <span class="cl-name">@item.CompanyName</span>
+                                }
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="cl-item" aria-hidden="true">
+                                @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                {
+                                    <img src="@item.LogoUrl" alt="" loading="lazy">
+                                }
+                                else
+                                {
+                                    <span class="cl-name">@item.CompanyName</span>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
 }
+
+<style>
+    #clients {
+        padding: 72px 0;
+        background: #f7f7f7;
+        overflow: hidden;
+    }
+
+    .cl-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 32px;
+    }
+
+    .section-label-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #c0392b;
+        white-space: nowrap;
+    }
+
+    .label-line {
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+    }
+
+    .cl-title {
+        font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+        font-weight: 800;
+        color: #1a1a1a;
+        margin: 0 0 40px;
+        letter-spacing: -0.02em;
+    }
+
+    /* MARQUEE */
+    .cl-track-wrap {
+        overflow: hidden;
+        position: relative;
+    }
+
+        .cl-track-wrap::before,
+        .cl-track-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .cl-track-wrap::before {
+            left: 0;
+            background: linear-gradient(to right, #f7f7f7, transparent);
+        }
+
+        .cl-track-wrap::after {
+            right: 0;
+            background: linear-gradient(to left, #f7f7f7, transparent);
+        }
+
+    .cl-track {
+        display: flex;
+        align-items: center;
+        width: max-content;
+        animation: cl-marquee 30s linear infinite;
+    }
+
+        .cl-track:hover {
+            animation-play-state: paused;
+        }
+
+    .cl-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 40px;
+        border-right: 1px solid #e0e0e0;
+        flex-shrink: 0;
+        text-decoration: none;
+        filter: grayscale(100%);
+        opacity: 0.5;
+        transition: filter 0.3s, opacity 0.3s;
+    }
+
+        .cl-item:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        .cl-item img {
+            height: 42px;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
+            display: block;
+        }
+
+    .cl-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a1a1a;
+        white-space: nowrap;
+    }
+
+    @@keyframes cl-marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        #clients {
+            padding: 56px 0;
+        }
+
+        .cl-container {
+            padding: 0 20px;
+        }
+
+        .cl-item {
+            padding: 16px 28px;
+        }
+    }
+</style>

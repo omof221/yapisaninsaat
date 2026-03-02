@@ -1,17 +1,55 @@
 @model yapisaninsaat.Models.ContactMessage
 @{ ViewData["Title"] = "Mesaj Sil"; }
 
-<h2 class="mb-4 text-danger"><i class="fas fa-trash me-2"></i>Mesajı Sil</h2>
-<div class="card border-danger"><div class="card-body">
-<div class="alert alert-danger"><strong>@Model.FullName</strong> tarafından gönderilen mesajı silmek istediğinize emin misiniz?</div>
-<dl class="row">
-    <dt class="col-sm-3">Ad Soyad</dt><dd class="col-sm-9">@Model.FullName</dd>
- <dt class="col-sm-3">E-posta</dt><dd class="col-sm-9">@Model.Email</dd>
-    <dt class="col-sm-3">Tarih</dt><dd class="col-sm-9">@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</dd>
-</dl>
-<form asp-action="Delete">
- <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Sil</button>
-    <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
-</form>
-</div></div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-danger"><i class="fas fa-trash me-2"></i>Mesajı Sil</h2>
+    <a asp-action="Index" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Listeye Dön</a>
+</div>
+
+<div class="card border-danger">
+    <div class="card-body">
+        <div class="alert alert-danger d-flex align-items-start">
+ <i class="fas fa-exclamation-triangle me-3 mt-1" style="font-size:20px"></i>
+ <div>
+     <strong>Bu mesajı silmek istediğinize emin misiniz?</strong>
+   <p class="mb-0 mt-1 text-muted">Bu işlem geri alınamaz.</p>
+         </div>
+        </div>
+
+ <div class="row mt-4">
+   <div class="col-md-6">
+   <table class="table table-borderless mb-0">
+  <tr>
+   <td class="text-muted fw-bold" style="width:120px"><i class="fas fa-user me-2"></i>Ad Soyad</td>
+      <td class="fw-bold">@Model.FullName</td>
+ </tr>
+ <tr>
+      <td class="text-muted fw-bold"><i class="fas fa-envelope me-2"></i>E-posta</td>
+     <td>@(Model.Email ?? "—")</td>
+     </tr>
+  <tr>
+            <td class="text-muted fw-bold"><i class="fas fa-phone me-2"></i>Telefon</td>
+<td>@(Model.Phone ?? "—")</td>
+    </tr>
+    <tr>
+  <td class="text-muted fw-bold"><i class="fas fa-clock me-2"></i>Tarih</td>
+   <td>@Model.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+      </tr>
+    </table>
+   </div>
+  <div class="col-md-6">
+    <div class="p-3 rounded" style="background:#f8f9fa; border-left:3px solid #dc3545; font-size:14px">
+        <small class="text-muted d-block mb-2"><strong>Mesaj:</strong></small>
+         @(Model.Message.Length > 200 ? Model.Message.Substring(0, 200) + "..." : Model.Message)
+ </div>
+      </div>
+        </div>
+
+   <hr class="my-4" />
+  <form asp-action="Delete">
+  <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger"><i class="fas fa-trash me-1"></i>Evet, Kalıcı Olarak Sil</button>
+ <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+        </form>
+    </div>
+</div>

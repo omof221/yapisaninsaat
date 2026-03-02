@@ -1,188 +1,390 @@
 @{
     var settings = ViewBag.Settings as yapisaninsaat.Models.Setting;
     var services = ViewBag.Services as List<yapisaninsaat.Models.Service>;
+    string currentPath = Context.Request.Path.ToString().ToLower();
 }
 
-<header class="navbar-wrapper">
-    <div class="nav-container">
-        @* SOL LOGO *@
-        <div class="side-logo-fixed left-side">
-            <a href="/">
-                <div class="logo-crop-box">
-                    <img src="https://i.hizliresim.com/4lgr4co.png" alt="Yapısan Mühendislik">
-                </div>
-            </a>
-        </div>
+<header class="site-header" id="siteHeader">
 
-        @* ORTA NAVİGASYON KAPSÜLÜ *@
-        <nav id="central-capsule">
-            <div class="nav-links">
-                <a href="/hakkimizda">Hakkımızda</a>
-                <a href="/projeler">Projeler</a>
-                <a href="/#testimonials">Referanslar</a>
+    @* Sola iten boşluk *@
+    <div class="spacer"></div>
+
+    @* SOL LOGO — Anasayfa'nın hemen solunda *@
+    <a href="/" class="logo-panel logo-left">
+        <img src="https://i.hizliresim.com/ztearns.png" alt="Yapısan Mühendislik">
+    </a>
+
+    @* NAVİGASYON *@
+    <nav class="header-nav" id="headerNav">
+        <a href="/" class="nav-link @(currentPath == "/" ? "active" : "")">Anasayfa</a>
+        <a href="/hakkimizda" class="nav-link @(currentPath.Contains("hakkimizda") ? "active" : "")">Kurumsal</a>
+
+        @if (services != null && services.Any())
+        {
+            <div class="nav-dropdown">
+                <button class="nav-link dropdown-toggle">
+                    Hizmetler
+                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button>
+                <div class="dropdown-menu">
+                    @foreach (var svc in services)
+                    {
+                        <a href="/hizmetler/@svc.Slug" class="dropdown-item">@svc.Title</a>
+                    }
+                </div>
             </div>
-            <a class="action-btn-pill" href="/#cta">Teklif Al</a>
-        </nav>
+        }
 
-        @* SAĞ LOGO *@
-        <div class="side-logo-fixed right-side">
-            <a href="/">
-                <div class="logo-crop-box">
-                    <img src="https://i.hizliresim.com/bl5h0sc.png" alt="İpekyolu İnşaat">
-                </div>
-            </a>
-        </div>
-    </div>
+        <a href="/projeler" class="nav-link @(currentPath.Contains("proje") ? "active" : "")">Projeler</a>
+        <a href="/#testimonials" class="nav-link">Referanslar</a>
+        <a href="/Home/Contact/" class="nav-link nav-cta">İletişim</a>
+    </nav>
+
+    @* SAĞ LOGO — İletişim butonunun hemen sağında *@
+    <a href="/" class="logo-panel logo-right">
+        <img src="https://i.hizliresim.com/aa1ue6i.png" alt="İpekyolu İnşaat">
+    </a>
+
+    @* Sağa iten boşluk *@
+    <div class="spacer"></div>
+
+    @* MOBİL HAMBURGER *@
+    <button class="hamburger" id="hamburger" aria-label="Menü">
+        <span></span><span></span><span></span>
+    </button>
+
 </header>
 
 <style>
-    /* GENEL YAPI */
-    .navbar-wrapper {
+    :root {
+        --red: #c0392b;
+        --red-dark: #96281b;
+        --dark: #1a1a1a;
+        --border: #e0e0e0;
+        --header-h: 100px; /* Header & logo yüksekliği */
+        --logo-w: 280px; /* Logo panel genişliği     */
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        padding-top: var(--header-h);
+    }
+
+    /* ══ HEADER ══ */
+    .site-header {
         position: fixed;
-        top: 20px;
+        top: 0;
         left: 0;
         right: 0;
         z-index: 1000;
-        pointer-events: none;
+        background: #fff;
+        height: var(--header-h);
+        display: flex;
+        align-items: stretch;
+        border-bottom: 2px solid var(--border);
+        transition: box-shadow 0.3s;
     }
 
-    .nav-container {
+        .site-header.scrolled {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+    /* Eşit boşluklar — içeriği yatayda ortalar */
+    .spacer {
+        flex: 1;
+    }
+
+    /* ══ LOGO PANELLERİ ══ */
+    .logo-panel {
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        max-width: 1300px;
-        margin: 0 auto;
-        padding: 0 10px;
-        /* Mobilde zorla yan yana tutmak için kritik ayar */
-        flex-wrap: nowrap !important;
-    }
-
-    /* LOGO AYARLARI */
-    .side-logo-fixed {
-        pointer-events: auto;
-        position: relative; /* Mobilde hizalama için relative kalsın */
-        width: 180px;
-        height: 90px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* KAPSÜLE OLAN MESAFE (Masaüstü) */
-    .left-side {
-        margin-right: 15px;
-    }
-
-    .right-side {
-        margin-left: 15px;
-    }
-
-    .logo-crop-box {
-        width: 100%;
+        width: var(--logo-w);
         height: 100%;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-shrink: 0;
+        text-decoration: none;
+        padding: 8px 16px;
+        background: #fff;
+        border: none; /* çizgi yok */
+        transition: background 0.2s;
     }
 
-        .logo-crop-box img {
-            /* Sol logo yazısının kesilmemesi için yukarı hizalama */
-            transform: scale(4.0);
+        .logo-panel img {
+            display: block;
             width: 100%;
             height: 100%;
             object-fit: contain;
-            object-position: top center;
+            object-position: center;
+            transition: transform 0.25s, opacity 0.25s;
         }
 
-    /* KAPSÜL TASARIMI */
-    #central-capsule {
-        pointer-events: auto;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 8px 20px;
-        border-radius: 100px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255,255,255,0.4);
-        flex-shrink: 0; /* Kapsülün mobilde ezilmesini engeller */
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 12px;
-    }
-
-        .nav-links a {
-            color: #1a1a1a;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13px;
-            white-space: nowrap;
+        .logo-panel:hover {
+            background: #f5f7fa;
         }
 
-    .action-btn-pill {
-        background: #1a1a1a;
-        color: #fff !important;
-        padding: 8px 18px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
-    /* MOBİL ÖZEL DÜZENLEME: Her Şeyi Tek Satıra Sığdırır */
-    @@media (max-width: 768px) {
-        .navbar-wrapper {
-            top: 10px;
-        }
-
-        .nav-container {
-            padding: 0 5px;
-            gap: 5px;
-        }
-
-        .side-logo-fixed {
-            width: 70px; /* Mobilde alanı daraltmak için küçültüldü */
-            height: 45px;
-            margin: 0 !important;
-        }
-
-        .logo-crop-box img {
-            transform: scale(2.2); /* Mobilde taşmayı önlemek için ölçek düşürüldü */
-        }
-
-        #central-capsule {
-            padding: 6px 12px;
-            gap: 8px;
-        }
-
-        .nav-links {
-            gap: 6px;
-        }
-
-            .nav-links a {
-                font-size: 10px; /* Mobilde yazıları sığdırmak için küçültme */
+            .logo-panel:hover img {
+                transform: scale(1.03);
+                opacity: 0.88;
             }
 
-        .action-btn-pill {
-            padding: 6px 10px;
-            font-size: 10px;
+    /* ══ NAVİGASYON ══ */
+    .header-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        flex-shrink: 0;
+    }
+
+    .nav-link {
+        position: relative;
+        padding: 6px 14px;
+        color: var(--dark);
+        text-decoration: none;
+        font-size: 14.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 14px;
+            right: 14px;
+            height: 2px;
+            background: var(--red);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--red);
+        }
+
+            .nav-link:hover::after,
+            .nav-link.active::after {
+                transform: scaleX(1);
+            }
+
+    .nav-cta {
+        background: var(--red);
+        color: #fff !important;
+        border-radius: 4px;
+        padding: 9px 20px;
+        margin-left: 8px;
+    }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        .nav-cta:hover {
+            background: var(--red-dark) !important;
+        }
+
+    /* ══ DROPDOWN ══ */
+    .nav-dropdown {
+        position: relative;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 12px);
+        left: 50%;
+        transform: translateX(-50%) translateY(8px);
+        min-width: 200px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-top: 3px solid var(--red);
+        border-radius: 0 0 6px 6px;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+        padding: 6px 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s;
+        z-index: 200;
+    }
+
+    .nav-dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 10px 18px;
+        color: var(--dark);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        transition: background 0.15s, color 0.15s;
+    }
+
+        .dropdown-item:hover {
+            background: #fdf2f2;
+            color: var(--red);
+        }
+
+    /* ══ HAMBURGER ══ */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px 16px;
+        align-self: center;
+    }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+    /* ══ MOBİL ══ */
+    @@media (max-width: 900px) {
+        :root {
+            --header-h: 72px;
+      --logo-w: 130px;
+        }
+
+        .hamburger {
+      display: flex;
+        }
+
+  .spacer {
+            display: none;
+        }
+
+  .site-header {
+            justify-content: space-between;
+}
+
+        .logo-right {
+       display: flex;
+   order: 1;
+    }
+
+  .hamburger {
+      order: 2;
+      }
+
+        .header-nav {
+  position: fixed;
+  top: var(--header-h);
+          left: 0;
+   right: 0;
+     background: #fff;
+     flex-direction: column;
+      align-items: stretch;
+          padding: 12px 0 20px;
+   gap: 0;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+transform: translateY(-120%);
+     transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+         z-index: 999;
+        }
+
+          .header-nav.open {
+      transform: translateY(0);
+ }
+
+        .nav-link {
+      padding: 13px 28px;
+       font-size: 14px;
+  }
+
+       .nav-link::after {
+           display: none;
+         }
+
+        .nav-cta {
+            margin: 12px 28px 0;
+            justify-content: center;
+        }
+
+        .nav-dropdown .dropdown-menu {
+   position: static;
+            transform: none !important;
+      opacity: 1;
+ visibility: visible;
+   box-shadow: none;
+       border: none;
+            border-left: 3px solid var(--red);
+    margin: 0 28px 4px;
+   display: none;
+     }
+
+        .nav-dropdown.open .dropdown-menu {
+        display: block;
         }
     }
 
-    /* Ekstra küçük ekranlar için (iPhone SE vb.) */
-    @@media (max-width: 380px) {
-        .nav-links {
-            display: none;
+    @@media (max-width: 480px) {
+      :root {
+   --header-h: 64px;
+  --logo-w: 100px;
         }
-        /* Alan çok darsa linkleri gizle, sadece buton kalsın */
-        .side-logo-fixed {
-            width: 60px;
+
+        .logo-panel {
+            padding: 6px 8px;
         }
     }
 </style>
+
+<script>
+    window.addEventListener('scroll', () => {
+        document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    const hamburger = document.getElementById('hamburger');
+    const nav = document.getElementById('headerNav');
+    hamburger?.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        nav.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.nav-dropdown .dropdown-toggle').forEach(btn => {
+        btn.addEventListener('click', e => {
+            if (window.innerWidth <= 900) {
+                e.preventDefault();
+                btn.closest('.nav-dropdown').classList.toggle('open');
+            }
+        });
+    });
+</script>

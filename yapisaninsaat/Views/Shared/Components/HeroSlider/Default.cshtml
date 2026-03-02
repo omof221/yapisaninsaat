@@ -1,74 +1,606 @@
 @model List<yapisaninsaat.Models.Project>
 @{
     var sliders = ViewBag.Sliders as List<yapisaninsaat.Models.Slider>;
-    var heroSlider = sliders?.FirstOrDefault();
 }
-<section id="hero">
-    <div class="hero-bg">
-        @if (heroSlider != null && !string.IsNullOrEmpty(heroSlider.ImageUrl))
+
+<section id="hero-section">
+
+    <div class="hs-bg" id="hsBg">
+        @if (sliders != null && sliders.Any())
         {
-            <img src="@heroSlider.ImageUrl" alt="@heroSlider.Title">
+            @foreach (var (slide, i) in sliders.Select((s, i) => (s, i)))
+            {
+                <div class="hs-slide @(i == 0 ? "hs-active" : "")"
+                     style="background-image:url('@slide.ImageUrl')"></div>
+            }
         }
     </div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <div class="hero-text" style="padding-top: 80px;">
-            @if (heroSlider != null)
+    <div class="hs-overlay"></div>
+
+    <div class="hs-cols">
+
+        @* ── SOL: YAZI ── *@
+        <div class="hs-col-left">
+            <div class="hs-eyebrow">
+                <span class="hs-bar"></span>
+                <span class="hs-eyebrow-txt">Kaliteli Hizmetin Adresi</span>
+            </div>
+            <div class="hs-titles">
+                @if (sliders != null)
+                {
+                    @foreach (var (slide, i) in sliders.Select((s, i) => (s, i)))
+                    {
+                        <div class="hs-title-item @(i == 0 ? "hs-active" : "")">
+                            @if (!string.IsNullOrEmpty(slide.Title))
+                            {
+                                <h1 class="hs-title">@slide.Title</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(slide.Subtitle))
+                            {
+                                <p class="hs-sub">@slide.Subtitle</p>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+            <div class="hs-btns">
+                <a href="/projeler" class="hs-btn hs-btn-red">Projelerimizi İncele</a>
+                <a href="/Home/Contact/" class="hs-btn hs-btn-outline">Teklif Al</a>
+            </div>
+            @if (sliders != null && sliders.Count > 1)
             {
-                @if (!string.IsNullOrEmpty(heroSlider.Title))
-                {
-                    <h1 class="hero-title">@heroSlider.Title</h1>
-                }
-                @if (!string.IsNullOrEmpty(heroSlider.Subtitle))
-                {
-                    <div class="hero-tag">@heroSlider.Subtitle</div>
-                }
+                <div class="hs-dots" id="hsDots">
+                    @for (int i = 0; i < sliders.Count; i++)
+                    {
+                        <button class="hs-dot @(i == 0 ? "hs-active" : "")" data-i="@i"></button>
+                    }
+                </div>
             }
         </div>
-        @if (Model.Any())
+
+        @* ── SAĞ: PROJELER — tam yükseklik, fotoğraflar dolu ── *@
+        @if (Model != null && Model.Any())
         {
-            <div class="hero-slider">
-                <div class="slider-header">
-                    <span class="slider-title-large">ÖNE ÇIKAN PROJELER</span>
-                    <div class="slider-controls">
-                        <button class="slider-btn" id="sliderPrevBtn" aria-label="Önceki proje">
-                            <iconify-icon icon="lucify:arrow-left" style="font-size: 20px;"></iconify-icon>
-                        </button>
-                        <button class="slider-btn" id="sliderNextBtn" aria-label="Sonraki proje">
-                            <iconify-icon icon="lucify:arrow-right" style="font-size: 20px;"></iconify-icon>
-                        </button>
+            <div class="hs-col-right">
+
+                <div class="hs-frame">
+
+                    @* başlık overlay *@
+                    <div class="hs-panel-head">
+                        <span class="hs-panel-label">Öne Çıkan Projeler</span>
+                        <a href="/projeler" class="hs-panel-all">Tümünü Gör &rarr;</a>
                     </div>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="sliderTrack">
+
+                    @* kartlar: her biri tam genişlik fotoğraf *@
+                    <div class="hs-cards" id="hsCards">
                         @foreach (var project in Model)
                         {
-                            var coverImage = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover) ?? project.ProjectImages?.FirstOrDefault();
-                            <a class="slider-item" href="/proje/@project.Slug">
-                                @if (coverImage != null && !string.IsNullOrEmpty(coverImage.ImageUrl))
-                                {
-                                    <img src="@coverImage.ImageUrl" alt="@project.Title">
-                                }
-                                else
-                                {
-                                    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center">
-                                        <iconify-icon icon="lucify:building-2" style="font-size:64px;color:rgba(255,255,255,0.15)"></iconify-icon>
-                                    </div>
-                                }
-                                <div class="slider-item-info">
-                                    <div>
-                                        <div class="slider-item-name">@project.Title</div>
-                                        <div class="slider-item-meta">@project.Category?.Title • @project.Location</div>
-                                    </div>
-                                    <div class="slider-item-arrow">
-                                        <iconify-icon icon="lucify:arrow-right" style="font-size: 20px;"></iconify-icon>
-                                    </div>
+                            var img = project.ProjectImages?.FirstOrDefault(pi => pi.IsCover)
+                            ?? project.ProjectImages?.FirstOrDefault();
+                            <a class="hs-card" href="/proje/@project.Slug"
+                               style="@(img != null && !string.IsNullOrEmpty(img.ImageUrl) ? $"background-image:url('{img.ImageUrl}')" : "background:#111")">
+                                <div class="hs-card-grad"></div>
+                                <div class="hs-card-info">
+                                    @if (!string.IsNullOrEmpty(project.Category?.Title))
+                                    {
+                                        <span class="hs-card-cat">@project.Category.Title</span>
+                                    }
+                                    <span class="hs-card-name">@project.Title</span>
+                                    @if (!string.IsNullOrEmpty(project.Location))
+                                    {
+                                        <span class="hs-card-loc">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                            @project.Location
+                                        </span>
+                                    }
                                 </div>
+                                <span class="hs-card-arr">&#8594;</span>
                             </a>
                         }
-                    </div>
-                </div>
-            </div>
+                    </div>@* hs-cards *@
+
+                </div>@* hs-frame *@
+
+            </div>@* hs-col-right *@
         }
     </div>
+
+    @if (sliders != null && sliders.Count > 1)
+    {
+        <button class="hs-nav hs-nav-l" id="hsPrev">&#8592;</button>
+        <button class="hs-nav hs-nav-r" id="hsNext">&#8594;</button>
+    }
+
 </section>
+
+<style>
+    /* ══ SECTION ══ */
+    #hero-section {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 90px);
+        min-height: 620px;
+        overflow: hidden;
+    }
+
+    /* ── ARKA PLAN ── */
+    .hs-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hs-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transform: scale(1.04);
+        transition: opacity 1.2s ease, transform 7s ease;
+    }
+
+        .hs-slide.hs-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+    .hs-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(100deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0.15) 100%);
+        z-index: 1;
+    }
+
+    /* ══ İKİ KOLON ══ */
+    .hs-cols {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+    }
+
+    /* ── SOL ── */
+    .hs-col-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 60px 56px;
+        overflow: hidden;
+    }
+
+    .hs-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 26px;
+    }
+
+    .hs-bar {
+        display: block;
+        width: 40px;
+        height: 3px;
+        background: #c0392b;
+        border-radius: 2px;
+        flex-shrink: 0;
+    }
+
+    .hs-eyebrow-txt {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.65);
+    }
+
+    .hs-titles {
+        position: relative;
+        min-height: 180px;
+    }
+
+    .hs-title-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 1.2s ease, transform 1.2s ease;
+        pointer-events: none;
+    }
+
+        .hs-title-item.hs-active {
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+    .hs-title {
+        font-size: clamp(2rem, 3.8vw, 3.6rem);
+        font-weight: 900;
+        line-height: 1.1;
+        color: #fff;
+        letter-spacing: -0.02em;
+        margin: 0 0 14px 0;
+    }
+
+    .hs-sub {
+        font-size: 1rem;
+        color: rgba(255,255,255,0.7);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .hs-btns {
+        display: flex;
+        gap: 14px;
+        margin-top: 36px;
+        flex-wrap: wrap;
+    }
+
+    .hs-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 14px 32px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .hs-btn-red {
+        background: #c0392b;
+        color: #fff;
+        border: 2px solid #c0392b;
+    }
+
+        .hs-btn-red:hover {
+            background: #96281b;
+            border-color: #96281b;
+        }
+
+    .hs-btn-outline {
+        background: transparent;
+        color: #fff;
+        border: 2px solid rgba(255,255,255,0.45);
+    }
+
+        .hs-btn-outline:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+
+    .hs-dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 44px;
+    }
+
+    .hs-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        background: rgba(255,255,255,0.3);
+        transition: background 0.2s, transform 0.2s;
+    }
+
+        .hs-dot.hs-active {
+            background: #c0392b;
+            transform: scale(1.4);
+        }
+
+    /* hs-col-right tam kaplar ama içinde çerçeve var */
+    .hs-col-right {
+        width: 45%;
+        flex-shrink: 0;
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        /* Arka blur katmanı — kolonun tamamı */
+        .hs-col-right::before {
+            content: '';
+            position: absolute;
+            top: 5%; /* Üstten boşluk */
+            left: 5%; /* Soldan boşluk */
+            right: 5%; /* Sağdan boşluk */
+            bottom: 5%; /* Alttan boşluk */
+            border-radius: 14px; /* Kenarları yuvarla */
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.25);
+            z-index: 0;
+        }
+
+    /* Çerçeve — blur'dan küçük, ortada yüzer */
+    .hs-frame {
+        position: relative;
+        z-index: 2;
+        width: 88%;
+        height: 85%;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.12);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Başlık — üstte yüzen overlay */
+    .hs-panel-head {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%);
+    }
+
+    .hs-panel-label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .hs-panel-all {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.6);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .hs-panel-all:hover {
+            color: #fff;
+        }
+
+    /* Kart listesi — position:absolute, inset:0 → tüm sağ kolonu kaplar */
+    .hs-cards {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(192,57,43,0.5) transparent;
+    }
+
+        .hs-cards::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .hs-cards::-webkit-scrollbar-thumb {
+            background: rgba(192,57,43,0.5);
+            border-radius: 2px;
+        }
+
+    /* Her kart — eşit pay, tam genişlik fotoğraf */
+    .hs-card {
+        /* 4 kart eşit yükseklikte tüm alanı doldurur */
+        flex: 1;
+        min-height: 0;
+        /* Fotoğraf arka plan */
+        background-size: cover;
+        background-position: center;
+        background-color: #111;
+        /* Konumlandırma */
+        position: relative;
+        display: block;
+        text-decoration: none;
+        overflow: hidden;
+        /* Kartlar arası çizgi */
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        transition: filter 0.25s;
+    }
+
+        .hs-card:last-child {
+            border-bottom: none;
+        }
+
+        .hs-card:hover {
+            filter: brightness(1.1);
+        }
+
+    /* Alt koyu gradient — yazı okunabilsin */
+    .hs-card-grad {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.25) 50%, transparent 100% );
+    }
+
+    /* Yazı — sol alt */
+    .hs-card-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 44px;
+        padding: 0 18px 14px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .hs-card-cat {
+        display: inline-block;
+        background: #c0392b;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 2px 7px;
+        border-radius: 2px;
+        width: fit-content;
+        margin-bottom: 3px;
+    }
+
+    .hs-card-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+        line-height: 1.3;
+    }
+
+    .hs-card-loc {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        color: rgba(255,255,255,0.6);
+    }
+
+    /* Ok — sağ alt */
+    .hs-card-arr {
+        position: absolute;
+        bottom: 14px;
+        right: 16px;
+        z-index: 2;
+        font-size: 18px;
+        color: rgba(255,255,255,0.3);
+        transition: color 0.2s, transform 0.2s;
+    }
+
+    .hs-card:hover .hs-card-arr {
+        color: #c0392b;
+        transform: translateX(4px);
+    }
+
+    /* ── SLIDER OKLAR — sol alt ── */
+    .hs-nav {
+        position: absolute;
+        bottom: 40px;
+        z-index: 3;
+        width: 42px;
+        height: 42px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+        .hs-nav:hover {
+            background: #c0392b;
+            border-color: #c0392b;
+        }
+
+    .hs-nav-l {
+        left: 56px;
+    }
+
+    .hs-nav-r {
+        left: 110px;
+    }
+
+    /* ── MOBİL ── */
+    @@media (max-width: 900px) {
+        #hero-section {
+            height: auto;
+            min-height: calc(100svh - var(--header-h, 72px));
+   }
+
+        .hs-cols {
+            position: absolute;
+ flex-direction: column;
+    }
+
+        .hs-col-left {
+            padding: 60px 24px 40px;
+         min-height: 55vh;
+        }
+
+      .hs-col-right {
+            width: 100%;
+     height: 45vh;
+            border-left: none;
+     border-top: 1px solid rgba(255,255,255,0.1);
+ }
+    }
+
+    @@media (max-width: 480px) {
+        #hero-section {
+            min-height: calc(100svh - var(--header-h, 64px));
+        }
+
+        .hs-col-right {
+            display: none;
+    }
+
+     .hs-col-left {
+            min-height: calc(100svh - var(--header-h, 64px));
+     }
+    }
+</style>
+
+<script>
+    (function () {
+        const slides   = document.querySelectorAll('.hs-slide');
+        const txtItems = document.querySelectorAll('.hs-title-item');
+        const dots     = document.querySelectorAll('.hs-dot');
+        let cur = 0, timer;
+
+        function goTo(n) {
+            slides[cur]?.classList.remove('hs-active');
+            txtItems[cur]?.classList.remove('hs-active');
+            dots[cur]?.classList.remove('hs-active');
+            cur = (n + slides.length) % slides.length;
+            slides[cur]?.classList.add('hs-active');
+            txtItems[cur]?.classList.add('hs-active');
+            dots[cur]?.classList.add('hs-active');
+        }
+
+        function startAuto() {
+            clearInterval(timer);
+            if (slides.length > 1) timer = setInterval(() => goTo(cur + 1), 5500);
+        }
+
+        document.getElementById('hsPrev')?.addEventListener('click', () => { goTo(cur - 1); startAuto(); });
+        document.getElementById('hsNext')?.addEventListener('click', () => { goTo(cur + 1); startAuto(); });
+        dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); startAuto(); }));
+        startAuto();
+
+        /* Kaydırma — mouse wheel ile de çalışır, ok tuşları 1 kart kayar */
+        const cards = document.getElementById('hsCards');
+        document.getElementById('hsPrev')?.addEventListener('click', () => {
+            const h = cards?.querySelector('.hs-card')?.offsetHeight || 150;
+            cards?.scrollBy({ top: -h, behavior: 'smooth' });
+        });
+        document.getElementById('hsNext')?.addEventListener('click', () => {
+            const h = cards?.querySelector('.hs-card')?.offsetHeight || 150;
+            cards?.scrollBy({ top: h, behavior: 'smooth' });
+        });
+    })();
+</script>

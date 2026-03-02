@@ -2,25 +2,164 @@
 
 @if (Model.Any())
 {
-<section id="faq">
-    <div class="container">
-     <div class="section-header">
-    <h2 class="section-title">Sıkça Sorulan Sorular</h2>
-  </div>
-  <div class="faq-wrapper">
-    @{ bool isFirst = true; }
-   @foreach (var item in Model)
-   {
-        <div class="faq-item @(isFirst ? "" : "closed")" onclick="toggleFaq(this)">
-         <div class="faq-header">
-     @item.Question
-<span class="faq-icon"><iconify-icon icon="@(isFirst ? "lucide:minus" : "lucide:plus")"></iconify-icon></span>
- </div>
-     <div class="faq-body">@Html.Raw(item.Answer)</div>
-      </div>
-            isFirst = false;
-   }
+    <section id="faq">
+        <div class="faq-container">
+            <div class="section-label-row">
+                <span class="section-label">SSS</span>
+                <div class="label-line"></div>
+            </div>
+            <h2 class="faq-section-title">Sıkça Sorulan Sorular</h2>
+
+            <div class="faq-wrapper">
+                @{
+                    bool isFirst = true;
+                }
+                @foreach (var item in Model)
+                {
+                    <div class="faq-item @(isFirst ? "open" : "")" onclick="toggleFaq(this)">
+                        <div class="faq-q">
+                            <span>@item.Question</span>
+                            <div class="faq-icon-box">
+                                <svg class="icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+                                <svg class="icon-minus" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+                            </div>
+                        </div>
+                        <div class="faq-a">
+                            <div class="faq-a-inner">@Html.Raw(item.Answer)</div>
+                        </div>
+                    </div>
+                    isFirst = false;
+                }
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 }
+
+<style>
+    #faq {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .faq-container {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 0 32px;
+    }
+
+    .faq-section-title {
+        font-size: clamp(1.5rem, 2.5vw, 2rem);
+        font-weight: 800;
+        color: #1a1a1a;
+        margin: 0 0 40px;
+        letter-spacing: -0.02em;
+    }
+
+    /* ITEM */
+    .faq-item {
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+        .faq-item:first-child {
+            border-top: 1px solid #eee;
+        }
+
+    .faq-q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a1a;
+        user-select: none;
+        transition: color 0.2s;
+    }
+
+    .faq-item.open .faq-q {
+        color: #c0392b;
+    }
+
+    .faq-icon-box {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1.5px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.2s, border-color 0.2s;
+        color: #1a1a1a;
+    }
+
+    .faq-item.open .faq-icon-box {
+        background: #c0392b;
+        border-color: #c0392b;
+        color: #fff;
+    }
+
+    .icon-plus {
+        display: block;
+    }
+
+    .icon-minus {
+        display: none;
+    }
+
+    .faq-item.open .icon-plus {
+        display: none;
+    }
+
+    .faq-item.open .icon-minus {
+        display: block;
+    }
+
+    /* ANSWER */
+    .faq-a {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.35s ease;
+    }
+
+    .faq-item.open .faq-a {
+        grid-template-rows: 1fr;
+    }
+
+    .faq-a-inner {
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 1.75;
+        color: #666;
+        padding-bottom: 0;
+        transition: padding-bottom 0.35s;
+    }
+
+    .faq-item.open .faq-a-inner {
+        padding-bottom: 20px;
+    }
+
+    @@media (max-width: 768px) {
+        #faq {
+            padding: 56px 0;
+        }
+
+        .faq-container {
+            padding: 0 20px;
+        }
+
+        .faq-q {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<script>
+    function toggleFaq(el) {
+        const isOpen = el.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        if (!isOpen) el.classList.add('open');
+    }
+</script>

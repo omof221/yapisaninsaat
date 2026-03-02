@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using yapisaninsaat.Models;
 
 namespace yapisaninsaat.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         private readonly AppDbContext _context;

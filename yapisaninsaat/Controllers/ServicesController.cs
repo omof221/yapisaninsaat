@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using yapisaninsaat.Helpers;
@@ -5,7 +6,8 @@ using yapisaninsaat.Models;
 
 namespace yapisaninsaat.Controllers
 {
- public class ServicesController : Controller
+    [Authorize(Roles = "Admin")]
+    public class ServicesController : Controller
     {
    private readonly AppDbContext _context;
       private readonly IWebHostEnvironment _env;

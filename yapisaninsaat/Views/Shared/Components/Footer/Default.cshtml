@@ -1,62 +1,257 @@
 @model yapisaninsaat.Models.Setting
 @{
-  var services = ViewBag.Services as List<yapisaninsaat.Models.Service>;
+    var services = ViewBag.Services as List<yapisaninsaat.Models.Service>;
 }
 
 <footer id="footer">
-    <div class="container">
-    <div class="footer-grid">
-    <div class="footer-brand">
- <h3>Yapısan İnşaat</h3>
-        <p>@(Model?.FooterText ?? "Premium kalite ve mühendislik harikası yapılarla geleceği inşa eden lider marka.")</p>
-         @if (!string.IsNullOrEmpty(Model?.Address))
-  {
-     <p style="margin-top:12px;font-size:13px;opacity:0.6"><iconify-icon icon="lucide:map-pin" style="font-size:14px;margin-right:4px"></iconify-icon>@Model.Address</p>
-        }
-   </div>
-         <div class="footer-links-group">
-    <div class="footer-col">
-    <h4>Kurumsal</h4>
-          <ul>
-   <li><a href="#stats">Hakkımızda</a></li>
-      <li><a href="#testimonials">Referanslar</a></li>
-       <li><a href="#faq">SSS</a></li>
-        <li><a href="#cta">İletişim</a></li>
-     </ul>
-   </div>
-    @if (services != null && services.Any())
-   {
-  <div class="footer-col">
- <h4>Uzmanlık</h4>
-    <ul>
-    @foreach (var svc in services)
-      {
-       <li><a href="/hizmetler/@svc.Slug">@svc.Title</a></li>
-  }
-    </ul>
-     </div>
- }
-     <div class="footer-col">
-    <h4>İletişim</h4>
-      <ul>
-   @if (!string.IsNullOrEmpty(Model?.Phone))
-              {
-  <li><a href="tel:@Model.Phone"><iconify-icon icon="lucide:phone" style="font-size:12px;margin-right:4px"></iconify-icon>@Model.Phone</a></li>
-   }
-        @if (!string.IsNullOrEmpty(Model?.Email))
-{
- <li><a href="mailto:@Model.Email"><iconify-icon icon="lucide:mail" style="font-size:12px;margin-right:4px"></iconify-icon>@Model.Email</a></li>
-    }
-   </ul>
-       </div>
-    </div>
-       </div>
- <div class="footer-bottom">
-            <div>&copy; @DateTime.Now.Year Yapısan İnşaat. Tüm hakları saklıdır.</div>
-         <div style="display:flex; gap:24px">
-     <a href="#" style="color:#aaa;text-decoration:none">Gizlilik Politikası</a>
-            <a href="#" style="color:#aaa;text-decoration:none">Çerezler</a>
-   </div>
-  </div>
+    <div class="ft-container">
+        <div class="ft-top">
+
+            @* BRAND *@
+            <div class="ft-brand">
+                <a href="/" class="ft-logo">
+                    <img src="https://i.hizliresim.com/4lgr4co.png" alt="Yapısan İnşaat">
+                </a>
+                <p class="ft-desc">@(Model?.FooterText ?? "Premium kalite ve mühendislik harikası yapılarla geleceği inşa eden lider marka.")</p>
+                @if (!string.IsNullOrEmpty(Model?.Address))
+                {
+                    <p class="ft-address">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                        @Model.Address
+                    </p>
+                }
+            </div>
+
+            @* LİNKLER *@
+            <div class="ft-links">
+                <div class="ft-col">
+                    <h4 class="ft-col-title">Kurumsal</h4>
+                    <ul>
+                        <li><a href="/">Anasayfa</a></li>
+                        <li><a href="/hakkimizda">Hakkımızda</a></li>
+                        <li><a href="/projeler">Projeler</a></li>
+                        <li><a href="/#testimonials">Referanslar</a></li>
+                        <li><a href="/#faq">SSS</a></li>
+                    </ul>
+                </div>
+
+                @if (services != null && services.Any())
+                {
+                    <div class="ft-col">
+                        <h4 class="ft-col-title">Hizmetler</h4>
+                        <ul>
+                            @foreach (var svc in services)
+                            {
+                                <li><a href="/hizmetler/@svc.Slug">@svc.Title</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="ft-col">
+                    <h4 class="ft-col-title">İletişim</h4>
+                    <ul>
+                        @if (!string.IsNullOrEmpty(Model?.Phone))
+                        {
+                            <li>
+                                <a href="tel:@Model.Phone">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 11.1a19.79 19.79 0 01-3.07-8.67A2 2 0 012.01 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" /></svg>
+                                    @Model.Phone
+                                </a>
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model?.Email))
+                        {
+                            <li>
+                                <a href="mailto:@Model.Email">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+                                    @Model.Email
+                                </a>
+                            </li>
+                        }
+                        @if (!string.IsNullOrEmpty(Model?.Address))
+                        {
+                            <li class="ft-addr-item">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                @Model.Address
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        @* BOTTOM *@
+        <div class="ft-bottom">
+            <span>&copy; @DateTime.Now.Year Yapısan İnşaat &ndash; Tüm hakları saklıdır.</span>
+            <div class="ft-bottom-links">
+                <a href="#">Gizlilik Politikası</a>
+                <span class="ft-sep">|</span>
+                <a href="#">Çerezler</a>
+            </div>
+        </div>
     </div>
 </footer>
+
+<style>
+    #footer {
+        background: #111;
+        color: #aaa;
+    }
+
+    .ft-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 32px;
+    }
+
+    /* TOP */
+    .ft-top {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 64px;
+        padding: 64px 0 48px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* BRAND */
+    .ft-logo {
+        display: inline-block;
+        margin-bottom: 16px;
+    }
+
+        .ft-logo img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.85;
+        }
+
+    .ft-desc {
+        font-size: 13px;
+        line-height: 1.75;
+        color: #888;
+        margin: 0 0 16px;
+    }
+
+    .ft-address {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 12px;
+        color: #666;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+        .ft-address svg {
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+    /* LİNKLER */
+    .ft-links {
+        display: flex;
+        gap: 48px;
+        flex-wrap: wrap;
+    }
+
+    .ft-col {
+        min-width: 140px;
+    }
+
+    .ft-col-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #fff;
+        margin: 0 0 16px;
+    }
+
+    .ft-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ft-col a,
+    .ft-addr-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        color: #777;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .ft-col a:hover {
+            color: #c0392b;
+        }
+
+    .ft-addr-item {
+        color: #666;
+        cursor: default;
+    }
+
+    /* BOTTOM */
+    .ft-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        font-size: 12px;
+        color: #555;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .ft-bottom-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .ft-bottom-links a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+            .ft-bottom-links a:hover {
+                color: #c0392b;
+            }
+
+    .ft-sep {
+        color: #333;
+    }
+
+    /* MOBİL */
+    @@media (max-width: 900px) {
+        .ft-top {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            padding: 48px 0 36px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .ft-container {
+            padding: 0 20px;
+        }
+
+        .ft-links {
+            gap: 32px;
+        }
+
+        .ft-bottom {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>

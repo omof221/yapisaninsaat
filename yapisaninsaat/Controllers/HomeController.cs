@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using yapisaninsaat.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using yapisaninsaat.Models;
 
 namespace yapisaninsaat.Controllers
 {
+    //[Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -67,6 +69,13 @@ namespace yapisaninsaat.Controllers
             ViewBag.Project = project;
 
             return View(project);
+        }
+
+        public async Task<IActionResult> Contact()
+        {
+            var settings = await _context.Settings.FirstOrDefaultAsync();
+            ViewBag.Settings = settings;
+            return View();
         }
 
         public IActionResult Privacy()
